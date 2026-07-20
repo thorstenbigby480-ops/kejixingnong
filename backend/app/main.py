@@ -103,9 +103,6 @@ def seed_data():
         db.close()
 
 
-# 启动时自动填充数据
-seed_data()
-
 app = FastAPI(
     title=f"{settings.APP_NAME} API",
     version=settings.APP_VERSION,
