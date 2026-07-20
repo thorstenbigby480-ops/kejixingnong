@@ -28,7 +28,7 @@ def seed_data():
             merchant = User(
                 username="merchant001",
                 email="merchant@greenpulse.com",
-                password_hash=hashed_pwd,
+                hashed_password=hashed_pwd,
                 phone="13800138000",
                 role="merchant",
             )
@@ -102,6 +102,9 @@ def seed_data():
     finally:
         db.close()
 
+
+# 启动时自动填充种子数据
+seed_data()
 
 app = FastAPI(
     title=f"{settings.APP_NAME} API",
