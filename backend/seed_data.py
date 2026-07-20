@@ -596,6 +596,11 @@ def main():
         print(f"  用户: {db.query(User).count()} 个")
         print("=" * 60)
 
+    except Exception as e:
+        # 即使数据初始化失败，也不要阻塞部署
+        import traceback
+        print(f"\n[seed] 数据填充出错（不阻塞部署）: {e}")
+        traceback.print_exc()
     finally:
         db.close()
 
