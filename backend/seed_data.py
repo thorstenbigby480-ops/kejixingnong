@@ -504,6 +504,16 @@ def main():
     print("绿脉兴农 · 种子数据填充")
     print("=" * 60)
 
+    # 先测试数据库连接，连不上就优雅退出（构建阶段数据库不可用）
+    try:
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        print("[seed] ✓ 数据库连接正常")
+    except Exception as e:
+        print(f"[seed] 数据库暂不可用（构建阶段正常），跳过数据填充: {e}")
+        return  # exit code 0，不阻塞构建
+
     # 创建表
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
