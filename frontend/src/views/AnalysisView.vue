@@ -298,8 +298,12 @@ function renderObstacleChart() {
 
 async function downloadReport() {
   if (!result.value?.id) return
+  // 先触发后端生成报告
   await request.get(`/analysis/${result.value.id}/report`)
-  window.open(`http://localhost:8000/uploads/report_${result.value.id}.pdf`, '_blank')
+  // 通过 baseURL 拼接 PDF 路径，避免硬编码 localhost
+  const baseURL = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api'
+  const apiOrigin = baseURL.replace(/\/api$/, '')
+  window.open(`${apiOrigin}/uploads/report_${result.value.id}.pdf`, '_blank')
 }
 
 onMounted(loadTemplate)

@@ -103,6 +103,87 @@
           </div>
         </div>
 
+        <!-- 商家上架商品（仅 merchant 角色可见）-->
+        <div v-if="user.role === 'merchant'" class="records-card gp-anim-fade-up" style="margin-top:24px">
+          <div class="records-header">
+            <div>
+              <div class="card-eyebrow">PRODUCT UPLOAD</div>
+              <h3 class="records-title">上架新商品</h3>
+            </div>
+            <el-button type="primary" @click="showProductForm = true">
+              <el-icon><Plus /></el-icon> 发布商品
+            </el-button>
+          </div>
+
+          <!-- 商品上架表单 -->
+          <el-dialog v-model="showProductForm" title="发布新商品" width="600px">
+            <el-form :model="productForm" label-width="100px" label-position="right">
+              <el-form-item label="商品名称" required>
+                <el-input v-model="productForm.name" placeholder="例如：溧水蓝莓礼盒" />
+              </el-form-item>
+              <el-form-item label="分类" required>
+                <el-select v-model="productForm.category" placeholder="选择分类" style="width:100%">
+                  <el-option label="果蔬" value="果蔬" />
+                  <el-option label="粮油" value="粮油" />
+                  <el-option label="水产" value="水产" />
+                  <el-option label="食用菌" value="食用菌" />
+                  <el-option label="茶叶" value="茶叶" />
+                  <el-option label="畜禽" value="畜禽" />
+                  <el-option label="加工品" value="加工品" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="产地">
+                <el-input v-model="productForm.origin" placeholder="例如：江苏南京溧水" />
+              </el-form-item>
+              <el-form-item label="价格(元)" required>
+                <el-input-number v-model="productForm.price" :min="0" :precision="2" style="width:100%" />
+              </el-form-item>
+              <el-form-item label="库存" required>
+                <el-input-number v-model="productForm.stock" :min="0" style="width:100%" />
+              </el-form-item>
+              <el-form-item label="图片URL">
+                <el-input v-model="productForm.image_url" placeholder="https://..." />
+              </el-form-item>
+              <el-form-item label="生态认证">
+                <el-select v-model="productForm.eco_cert" placeholder="选择认证类型" style="width:100%" clearable>
+                  <el-option label="有机产品认证" value="有机产品认证" />
+                  <el-option label="绿色食品认证" value="绿色食品认证" />
+                  <el-option label="地理标志产品" value="地理标志产品" />
+                  <el-option label="无公害农产品" value="无公害农产品" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="商品描述">
+                <el-input v-model="productForm.description" type="textarea" :rows="3" placeholder="简要描述商品特色" />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <el-button @click="showProductForm = false">取消</el-button>
+              <el-button type="primary" @click="submitProduct">发布</el-button>
+            </template>
+          </el-dialog>
+
+          <!-- 我上架的商品列表 -->
+          <el-table :data="myProducts" stripe v-loading="loadingProducts" style="margin-top:16px">
+            <el-table-column prop="name" label="商品名" min-width="160" />
+            <el-table-column prop="category" label="分类" width="100" />
+            <el-table-column prop="price" label="价格" width="100">
+              <template #default="{ row }">¥{{ row.price.toFixed(2) }}</template>
+            </el-table-column>
+            <el-table-column prop="stock" label="库存" width="80" />
+            <el-table-column prop="eco_cert" label="认证" width="140" />
+            <el-table-column prop="is_approved" label="状态" width="100">
+              <template #default="{ row }">
+                <span class="status-tag" :class="row.is_approved ? 'paid' : 'pending'">
+                  {{ row.is_approved ? '已上架' : '待审核' }}
+                </span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div v-if="!loadingProducts && myProducts.length === 0" class="empty-records">
+            <el-empty description="还未上架商品，点右上角发布吧" />
+          </div>
+        </div>
+
         <!-- 评估记录 -->
         <div class="records-card gp-anim-fade-up">
           <div class="records-header">
@@ -143,7 +224,55 @@
                 {{ row.created_at?.substring(0, 19).replace('T', ' ') }}
               </template>
             </el-table-column>
+            <el-table-column label="操作" width="180" fixed="right">
+              <template #default="{ row }">
+                <el-button type="primary" size="small" @click="viewDetail(row)">查看详情</el-button>
+                <el-button type="success" size="small" plain @click="downloadPdf(row)">下载PDF</el-button>
+              </template>
+            </el-table-column>
           </el-table>
+
+          <!-- 评估详情弹窗 -->
+          <el-dialog v-model="detailVisible" title="评估详情" width="80%" top="5vh" class="detail-dialog">
+            <div v-if="detailData" class="detail-content">
+              <el-descriptions :column="3" border>
+                <el-descriptions-item label="地区">{{ detailData.region_name }}</el-descriptions-item>
+                <el-descriptions-item label="年份">{{ detailData.year || '-' }}</el-descriptions-item>
+                <el-descriptions-item label="模式">
+                  <span class="gp-chip gp-chip-gold">{{ detailData.mode_type }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item label="生态得分">
+                  <span class="score-text">{{ detailData.eco_score }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item label="振兴得分">
+                  <span class="score-text gold">{{ detailData.rural_score }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item label="耦合协调度 D">
+                  <span class="d-value">{{ detailData.coupling_d }}</span>
+                  <span class="gp-chip" style="margin-left:8px">{{ detailData.coordination_level }}</span>
+                </el-descriptions-item>
+              </el-descriptions>
+
+              <el-divider content-position="left">模式判定依据</el-divider>
+              <div class="detail-text">{{ detailData.mode_reason }}</div>
+
+              <el-divider content-position="left">主要障碍因子</el-divider>
+              <div v-if="detailData.obstacles" class="obstacle-list">
+                <div v-for="(val, key) in detailData.obstacles" :key="key" class="obstacle-item">
+                  <span class="obstacle-name">{{ key }}</span>
+                  <el-progress :percentage="Number(val)" :stroke-width="14" :color="val > 15 ? '#c00' : '#c79a00'" />
+                </div>
+              </div>
+
+              <el-divider content-position="left">AI 路径优化建议</el-divider>
+              <div class="detail-text advice-text">{{ detailData.advice }}</div>
+
+              <div class="detail-actions">
+                <el-button type="success" @click="downloadPdf(detailData)">下载完整 PDF 报告</el-button>
+                <el-button @click="detailVisible = false">关闭</el-button>
+              </div>
+            </div>
+          </el-dialog>
 
           <div v-if="!loadingRecords && assessments.length === 0" class="empty-records">
             <el-empty description="暂无评估记录，去新建一个评估吧" />
@@ -221,6 +350,15 @@ const assessments = ref([])
 const loadingRecords = ref(false)
 const orders = ref([])
 const loadingOrders = ref(false)
+const detailVisible = ref(false)
+const detailData = ref(null)
+const showProductForm = ref(false)
+const productForm = reactive({
+  name: '', category: '', origin: '', price: 0, stock: 0,
+  image_url: '', eco_cert: '', description: '',
+})
+const myProducts = ref([])
+const loadingProducts = ref(false)
 
 const roleText = computed(() => {
   const map = { user: '普通用户', merchant: '商家', admin: '管理员' }
@@ -243,6 +381,9 @@ async function onLogin() {
   ElMessage.success('登录成功')
   loadAssessments()
   loadOrders()
+  if (res.user.role === 'merchant') {
+    loadMyProducts()
+  }
 }
 
 async function onRegister() {
@@ -273,6 +414,54 @@ async function loadAssessments() {
   } finally {
     loadingRecords.value = false
   }
+}
+
+async function viewDetail(row) {
+  try {
+    // 调用详情接口获取完整记录（含 advice/obstacles/raw_data）
+    const data = await request.get(`/analysis/${row.id}`)
+    detailData.value = data
+    detailVisible.value = true
+  } catch (e) {}
+}
+
+async function downloadPdf(row) {
+  try {
+    // 先触发后端生成 PDF
+    await request.get(`/analysis/${row.id}/report`)
+    // 通过 baseURL 拼接 PDF 路径
+    const baseURL = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api'
+    const apiOrigin = baseURL.replace(/\/api$/, '')
+    window.open(`${apiOrigin}/uploads/report_${row.id}.pdf`, '_blank')
+  } catch (e) {}
+}
+
+async function loadMyProducts() {
+  loadingProducts.value = true
+  try {
+    // 拉取所有商品，前端过滤当前商家的（接口没有按 merchant 过滤）
+    const res = await request.get('/mall/products', { params: { size: 100 } })
+    const all = res.items || res
+    myProducts.value = (Array.isArray(all) ? all : (all.items || [])).filter(p => p.merchant_id === user.value.id)
+  } catch (e) {} finally {
+    loadingProducts.value = false
+  }
+}
+
+async function submitProduct() {
+  if (!productForm.name || !productForm.category || !productForm.price) {
+    return ElMessage.error('请填写商品名称、分类和价格')
+  }
+  try {
+    await request.post('/mall/products', productForm)
+    ElMessage.success('商品发布成功')
+    showProductForm.value = false
+    // 重置表单
+    Object.keys(productForm).forEach(k => {
+      productForm[k] = (k === 'price' || k === 'stock') ? 0 : ''
+    })
+    loadMyProducts()
+  } catch (e) {}
 }
 
 async function loadOrders() {
@@ -323,6 +512,9 @@ onMounted(() => {
   if (user.value) {
     loadAssessments()
     loadOrders()
+    if (user.value.role === 'merchant') {
+      loadMyProducts()
+    }
   }
 })
 </script>
@@ -654,5 +846,55 @@ onMounted(() => {
   .auth-side { padding: 32px 24px; }
   .auth-form { padding: 32px 24px; }
   .profile-content { flex-direction: column; align-items: flex-start; }
+}
+
+/* === 评估详情弹窗 === */
+.detail-content { padding: 0 8px; }
+
+.detail-text {
+  background: var(--gp-paper);
+  padding: 16px 20px;
+  border-left: 4px solid var(--gp-gold);
+  color: var(--gp-ink-2);
+  font-size: 14px;
+  line-height: 1.8;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+.advice-text {
+  border-left-color: var(--gp-forest);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.obstacle-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+}
+
+.obstacle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.obstacle-name {
+  min-width: 200px;
+  font-size: 13px;
+  color: var(--gp-ink-2);
+}
+
+.detail-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .obstacle-list { grid-template-columns: 1fr; }
+  .obstacle-name { min-width: 140px; }
 }
 </style>

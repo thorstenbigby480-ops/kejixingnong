@@ -90,6 +90,7 @@ const navItems = [
   { path: '/', cn: '首页', en: 'HOME' },
   { path: '/policy', cn: '政策中心', en: 'POLICY' },
   { path: '/analysis', cn: '智能分析', en: 'ANALYSIS' },
+  { path: '/dashboard', cn: '数据大屏', en: 'DATA' },
   { path: '/mall', cn: '农产品商城', en: 'MALL' },
   { path: '/case', cn: '案例中心', en: 'CASE' },
 ]

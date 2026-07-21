@@ -11,6 +11,7 @@ const routes = [
       { path: 'analysis', name: 'analysis', component: () => import('../views/AnalysisView.vue') },
       { path: 'mall', name: 'mall', component: () => import('../views/MallView.vue') },
       { path: 'case', name: 'case', component: () => import('../views/CaseView.vue') },
+      { path: 'dashboard', name: 'dashboard', component: () => import('../views/DashboardView.vue') },
       { path: 'user', name: 'user', component: () => import('../views/UserView.vue') },
     ],
   },

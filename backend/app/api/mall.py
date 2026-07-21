@@ -38,7 +38,13 @@ def get_product(pid: int, db: Session = Depends(get_db)):
 
 
 @router.post("/products")
-def create_product(payload: dict, db: Session = Depends(get_db)):
+def create_product(payload: dict, request: Request, db: Session = Depends(get_db)):
+    """商家上架商品，需要 JWT 鉴权"""
+    user = _get_current_user(request)
+    if not user:
+        raise HTTPException(401, "请先登录")
+    if user.get("role") != "merchant":
+        raise HTTPException(403, "仅商家账号可上架商品")
     p = Product(
         name=payload["name"],
         category=payload["category"],
@@ -48,8 +54,8 @@ def create_product(payload: dict, db: Session = Depends(get_db)):
         image_url=payload.get("image_url"),
         eco_cert=payload.get("eco_cert"),
         description=payload.get("description"),
-        merchant_id=payload.get("merchant_id"),
-        is_approved=payload.get("is_approved", False),
+        merchant_id=user["uid"],
+        is_approved=payload.get("is_approved", True),  # 商家自己上架默认通过
     )
     db.add(p)
     db.commit()
