@@ -1,6 +1,7 @@
 """FastAPI 入口"""
 import os
 import bcrypt
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -11,9 +12,6 @@ from app.models.policy import Policy
 from app.models.case import Case
 from app.models.product import Product
 from app.api import auth, policy, analysis, mall, case
-
-# 启动时创建表
-Base.metadata.create_all(bind=engine)
 
 
 def seed_data():
@@ -60,7 +58,7 @@ def seed_data():
         if db.query(Case).count() == 0:
             cases = [
                 {"title": "浙江丽水：GEP核算开创生态价值转化新路", "region": "浙江省丽水市", "mode_type": "生态康养型", "summary": "丽水率先开展GEP核算，将生态资源转化为经济价值，2022年生态产品价值实现额超500亿元。", "content": "丽水通过建立GEP核算体系，将生态资源资产化，打通生态价值转化通道。", "image_url": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=80"},
-                {"title": "南京石湫：影视基地带动农文旅融合发展", "region": "江苏省南京市溧水区", "mode_type": "农文旅融合型", "summary": "石湫依托影视基地资源，发展乡村旅游和特色农业，年接待游客超100万人次。", "content": "石湫影视基地带动周边乡村发展民宿、农产品加工、文化体验等产业。", "image_url": "https://images.unsplash.com/photo-1444723121867-7a241cacace3?w=1200&q=80"},
+                {"title": "南京石：影视基地带动农文旅融合发展", "region": "江苏省南京市溧水区", "mode_type": "农文旅融合型", "summary": "石湫依托影视基地资源，发展乡村旅游和特色农业，年接待游客超100万人次。", "content": "石湫影视基地带动周边乡村发展民宿、农产品加工、文化体验等产业。", "image_url": "https://images.unsplash.com/photo-1444723121867-7a241cacace3?w=1200&q=80"},
                 {"title": "江苏苏州昆山：特色田园乡村建设示范", "region": "江苏省苏州市昆山市", "mode_type": "农业品牌型", "summary": "昆山打造特色田园乡村，发展稻香文化、水乡民宿、阳澄湖大闸蟹品牌，年旅游收入超30亿元。", "content": "昆山以文化为魂、以农业为基、以旅游为媒，实现农业、文化、旅游深度融合。", "image_url": "https://images.unsplash.com/photo-1528283648649-30a22d55e5cc?w=1200&q=80"},
                 {"title": "福建南平：'生态银行'激活绿色资源", "region": "福建省南平市", "mode_type": "湿地水域型", "summary": "南平市创新'生态银行'模式，将碎片化生态资源集中收储、规模化运营，2022年生态产品价值实现额超200亿元。", "content": "南平通过'生态银行'模式破解资源碎片化难题，实现生态资源规模化经营。", "image_url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80"},
                 {"title": "四川成都战旗村：集体土地入市改革试点", "region": "四川省成都市郫都区", "mode_type": "城郊消费型", "summary": "战旗村通过集体经营性建设用地入市，探索乡村振兴新路径，村集体收入超千万元。", "content": "战旗村盘活集体资产，发展乡村旅游、农产品加工、文化创意等产业。", "image_url": "https://images.unsplash.com/photo-1504788363733-507549153474?w=1200&q=80"},
@@ -103,13 +101,19 @@ def seed_data():
         db.close()
 
 
-# 启动时自动填充种子数据
-seed_data()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 启动时创建表 + 填充种子数据
+    Base.metadata.create_all(bind=engine)
+    seed_data()
+    yield
+
 
 app = FastAPI(
     title=f"{settings.APP_NAME} API",
     version=settings.APP_VERSION,
     description="生态产品价值实现赋能乡村振兴的一体化智能系统",
+    lifespan=lifespan,
 )
 
 # CORS（开发期放开；生产可通过 CORS_ORIGINS 环境变量限定）
