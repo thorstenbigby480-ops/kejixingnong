@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绿脉兴农 · 平台功能说明</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --forest: #0d3b2e;
+    --forest-3: #2d6a4f;
+    --moss: #52796f;
+    --gold: #c79a00;
+    --gold-light: #e6c449;
+    --cream: #faf7f0;
+    --paper: #f5f1e8;
+    --paper-2: #ede4d3;
+    --line: #e0d9c8;
+    --ink: #2a2a2a;
+    --ink-2: #5a5a5a;
+    --ink-3: #8a8a8a;
+    --red: #8b1e3f;
+    --clay: #b8860b;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* === 封面 === */
+  .cover {
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-3) 100%);
+    color: #fff;
+    padding: 120px 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 80% 30%, rgba(199, 154, 0, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+  }
+  .cover-inner { position: relative; z-index: 2; text-align: center; }
+  .cover-eyebrow {
+    display: inline-block;
+    padding: 8px 18px;
+    border: 1px solid rgba(199, 154, 0, 0.4);
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold-light);
+    margin-bottom: 32px;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .cover h1 {
+    font-family: "Songti SC", "STSong", serif;
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .cover-sub {
+    font-family: "Songti SC", "STSong", serif;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.15em;
+    margin-bottom: 40px;
+  }
+  .cover-desc {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 720px;
+    margin: 0 auto 48px;
+    line-height: 2;
+  }
+  .cover-stats {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    padding: 24px 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .cover-stat-num {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .cover-stat-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.15em;
+    margin-top: 8px;
+  }
+  .cover-seal {
+    position: absolute;
+    top: 80px;
+    right: 80px;
+    width: 100px;
+    height: 100px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-8deg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  .cover-seal-inner {
+    width: 86px;
+    height: 86px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Songti SC", serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1em;
+  }
+
+  /* === 章节 === */
+  section { padding: 80px 0; }
+  .section-head { margin-bottom: 48px; text-align: center; }
+  .section-eyebrow {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: "Songti SC", "STSong", serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .section-subtitle {
+    color: var(--ink-2);
+    font-size: 15px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* === 卡片 === */
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(13, 59, 46, 0.04);
+    margin-bottom: 24px;
+  }
+  .card-title {
+    font-family: "Songti SC", "STSong", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+  }
+
+  /* === 表格 === */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+    background: #fff;
+  }
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    background: var(--paper);
+    color: var(--forest);
+    font-weight: 600;
+    font-family: "Songti SC", serif;
+    font-size: 14px;
+  }
+  tr:hover { background: rgba(13, 59, 46, 0.02); }
+
+  /* === 网格 === */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+
+  /* === 模式卡 === */
+  .mode-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 20px;
+    transition: all 0.3s;
+    border-top: 4px solid var(--forest);
+  }
+  .mode-card:nth-child(1) { border-top-color: #2d6a4f; }
+  .mode-card:nth-child(2) { border-top-color: #4a90c2; }
+  .mode-card:nth-child(3) { border-top-color: var(--gold); }
+  .mode-card:nth-child(4) { border-top-color: #c97b5b; }
+  .mode-card:nth-child(5) { border-top-color: var(--red); }
+  .mode-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(13, 59, 46, 0.12);
+  }
+  .mode-num {
+    font-family: "SF Mono", monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .mode-name {
+    font-family: "Songti SC", serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .mode-reps {
+    font-size: 12px;
+    color: var(--ink-3);
+    font-family: "SF Mono", monospace;
+    margin-bottom: 12px;
+  }
+  .mode-threshold {
+    padding: 10px 12px;
+    background: rgba(13, 59, 46, 0.04);
+    border-left: 3px solid var(--forest-3);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .mode-path {
+    font-size: 12px;
+    color: var(--clay);
+    line-height: 1.7;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+
+  /* === 流程步骤 === */
+  .flow-steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 32px 0;
+  }
+  .flow-step {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    border-radius: 8px 0 0 8px;
+  }
+  .flow-step:last-child { border-radius: 0 8px 8px 0; }
+  .flow-step:not(:last-child) { border-right: none; }
+  .flow-step::after {
+    content: '';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid var(--gold);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    z-index: 2;
+  }
+  .flow-step:last-child::after { display: none; }
+  .flow-num {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--forest);
+    color: #fff;
+    font-family: "SF Mono", monospace;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .flow-title {
+    font-family: "Songti SC", serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .flow-desc {
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+
+  /* === 方法论卡 === */
+  .method-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .method-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--forest) 0%, var(--gold) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .method-card:hover::before { transform: scaleX(1); }
+  .method-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(13, 59, 46, 0.1);
+  }
+  .method-num {
+    font-family: "SF Mono", monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+  .method-card h3 {
+    font-family: "Songti SC", serif;
+    font-size: 18px;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+  .method-card p {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+
+  /* === 功能模块 === */
+  .feature-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 24px;
+    transition: all 0.3s;
+    border-left: 4px solid var(--forest);
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(13, 59, 46, 0.1);
+  }
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-3) 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    font-family: "Songti SC", serif;
+  }
+  .feature-card:nth-child(2) .feature-icon { background: linear-gradient(135deg, #4a90c2 0%, #5cb0d8 100%); }
+  .feature-card:nth-child(3) .feature-icon { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); }
+  .feature-card:nth-child(4) .feature-icon { background: linear-gradient(135deg, var(--moss) 0%, #8eb088 100%); }
+  .feature-card:nth-child(5) .feature-icon { background: linear-gradient(135deg, #c97b5b 0%, #e09872 100%); }
+  .feature-card:nth-child(6) .feature-icon { background: linear-gradient(135deg, var(--red) 0%, #b54464 100%); }
+  .feature-card h3 {
+    font-family: "Songti SC", serif;
+    font-size: 20px;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .feature-card .path {
+    font-family: "SF Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .feature-card p {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+
+  /* === SVG 容器 === */
+  .svg-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 24px 0;
+    box-shadow: 0 4px 20px rgba(13, 59, 46, 0.04);
+  }
+  .svg-card svg { width: 100%; height: auto; display: block; }
+  .svg-caption {
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 13px;
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* === 列表 === */
+  ul.feature-list { list-style: none; padding: 0; }
+  ul.feature-list li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  ul.feature-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  /* === 高亮块 === */
+  .highlight-box {
+    background: linear-gradient(135deg, #fffdf6 0%, #fdf8e8 100%);
+    border: 1px solid var(--gold-light);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    border-left: 4px solid var(--gold);
+  }
+  .highlight-box h4 {
+    color: var(--clay);
+    font-family: "Songti SC", serif;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* === 公式块 === */
+  .formula {
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 14px;
+    color: var(--forest);
+    margin: 16px 0;
+    line-height: 2;
+    border-left: 4px solid var(--forest);
+  }
+
+  /* === 页脚 === */
+  footer {
+    background: var(--forest);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 56px 0 32px;
+    margin-top: 80px;
+  }
+  footer::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, var(--forest) 0%, var(--gold) 100%);
+    margin: -56px 0 56px;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .footer-title {
+    font-family: "SF Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .footer-line { font-size: 13px; margin: 6px 0; color: rgba(255, 255, 255, 0.7); }
+  .footer-mark {
+    font-family: "Songti SC", serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1em;
+  }
+  .footer-tag {
+    font-family: "Songti SC", serif;
+    font-size: 14px;
+    color: var(--gold-light);
+    margin: 16px 0 0;
+    font-style: italic;
+  }
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 24px 0;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: "SF Mono", monospace;
+    letter-spacing: 0.1em;
+    max-width: 1200px;
+    margin: 32px auto 0;
+  }
+
+  /* === 响应式 === */
+  @media (max-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-5 { grid-template-columns: repeat(2, 1fr); }
+    .cover h1 { font-size: 52px; }
+    .cover-seal { display: none; }
+  }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+    .flow-steps { flex-direction: column; }
+    .flow-step::after { display: none; }
+    .cover h1 { font-size: 36px; }
+    .cover-stats { flex-wrap: wrap; gap: 16px; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<section class="cover">
+  <div class="cover-seal">
+    <div class="cover-seal-inner">
+      <span>绿脉</span>
+      <span>兴农</span>
+    </div>
+  </div>
+  <div class="container cover-inner">
+    <div class="cover-eyebrow">中国研究生乡村振兴科技强农+创新大赛</div>
+    <h1>绿脉兴农</h1>
+    <div class="cover-sub">生态产品价值实现赋能乡村振兴一体化智能系统</div>
+    <p class="cover-desc">
+      基于 AHP 层次分析 · 熵权法 · 耦合协调度 · 障碍度四大模型，<br>
+      一站式完成政策检索 · 数据评估 · AI 模式识别 · 路径优化建议生成
+    </p>
+    <div class="cover-stats">
+      <div>
+        <div class="cover-stat-num">5</div>
+        <div class="cover-stat-label">发展模式</div>
+      </div>
+      <div>
+        <div class="cover-stat-num">4</div>
+        <div class="cover-stat-label">评估模型</div>
+      </div>
+      <div>
+        <div class="cover-stat-num">27</div>
+        <div class="cover-stat-label">核心指标</div>
+      </div>
+      <div>
+        <div class="cover-stat-num">AI</div>
+        <div class="cover-stat-label">路径优化</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 平台概述 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">PLATFORM OVERVIEW</div>
+      <h2 class="section-title">平台概述</h2>
+      <p class="section-subtitle">面向地方政府、农业合作社、研究学者的一站式生态产品价值实现决策支持平台</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">算得清</div>
+        <p>11 项生态产品价值实现指标 + 15 项乡村振兴指标，通过 AHP 层次分析计算组合权重，加权综合评分得出 0-100 分量化结果。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">看得见</div>
+        <p>10 区县 5 年面板数据可视化大屏，5 种模式横向对比与时间序列演化，AHP 权重可视化 + 聚类散点图多维透视。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">走得通</div>
+        <p>AI 智能识别所属模式 → 27 条差异化路径优化建议 → DeepSeek 生成 500-800 字综合建议 → PDF 报告一键导出。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 系统架构图 ============ -->
+<section style="background: linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">SYSTEM ARCHITECTURE</div>
+      <h2 class="section-title">系统架构</h2>
+      <p class="section-subtitle">前后端分离 + 核心算法层 + 数据层，四层架构支撑完整业务闭环</p>
+    </div>
+
+    <div class="svg-card">
+      <svg viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="feGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2d6a4f"/>
+            <stop offset="100%" stop-color="#0d3b2e"/>
+          </linearGradient>
+          <linearGradient id="beGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c79a00"/>
+            <stop offset="100%" stop-color="#8a6a00"/>
+          </linearGradient>
+          <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#52796f"/>
+            <stop offset="100%" stop-color="#355e56"/>
+          </linearGradient>
+          <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b1e3f"/>
+            <stop offset="100%" stop-color="#5e1429"/>
+          </linearGradient>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+            <polygon points="0,0 10,3 0,6" fill="#8a8a8a"/>
+          </marker>
+        </defs>
+
+        <!-- 前端层 -->
+        <rect x="20" y="20" width="1060" height="180" rx="12" fill="url(#feGrad)" opacity="0.08"/>
+        <text x="40" y="48" font-family="serif" font-size="14" font-weight="700" fill="#0d3b2e">前端展示层 · Vue 3 + Element Plus</text>
+
+        <g font-family="sans-serif" font-size="12" fill="#fff">
+          <rect x="40" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="107" y="105" text-anchor="middle">首页</text>
+          <text x="107" y="125" text-anchor="middle" font-size="10" opacity="0.85">HomeView</text>
+          <text x="107" y="155" text-anchor="middle" font-size="10" opacity="0.7">门户展示</text>
+
+          <rect x="190" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="257" y="105" text-anchor="middle">政策中心</text>
+          <text x="257" y="125" text-anchor="middle" font-size="10" opacity="0.85">PolicyView</text>
+          <text x="257" y="155" text-anchor="middle" font-size="10" opacity="0.7">政策检索</text>
+
+          <rect x="340" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="407" y="100" text-anchor="middle" font-weight="700">智能分析 ⭐</text>
+          <text x="407" y="120" text-anchor="middle" font-size="10" opacity="0.85">AnalysisView</text>
+          <text x="407" y="145" text-anchor="middle" font-size="10" opacity="0.7">4模型评估</text>
+          <text x="407" y="162" text-anchor="middle" font-size="10" opacity="0.7">AI 模式识别</text>
+
+          <rect x="490" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="557" y="105" text-anchor="middle">数据大屏</text>
+          <text x="557" y="125" text-anchor="middle" font-size="10" opacity="0.85">DashboardView</text>
+          <text x="557" y="155" text-anchor="middle" font-size="10" opacity="0.7">多维可视化</text>
+
+          <rect x="640" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="707" y="105" text-anchor="middle">农产品商城</text>
+          <text x="707" y="125" text-anchor="middle" font-size="10" opacity="0.85">MallView</text>
+          <text x="707" y="155" text-anchor="middle" font-size="10" opacity="0.7">商品交易</text>
+
+          <rect x="790" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="857" y="105" text-anchor="middle">案例中心</text>
+          <text x="857" y="125" text-anchor="middle" font-size="10" opacity="0.85">CaseView</text>
+          <text x="857" y="155" text-anchor="middle" font-size="10" opacity="0.7">5模式案例</text>
+
+          <rect x="940" y="70" width="135" height="110" rx="8" fill="url(#feGrad)"/>
+          <text x="1007" y="105" text-anchor="middle">用户中心</text>
+          <text x="1007" y="125" text-anchor="middle" font-size="10" opacity="0.85">UserView</text>
+          <text x="1007" y="155" text-anchor="middle" font-size="10" opacity="0.7">JWT 鉴权</text>
+        </g>
+
+        <!-- 后端层 -->
+        <rect x="20" y="240" width="1060" height="160" rx="12" fill="url(#beGrad)" opacity="0.08"/>
+        <text x="40" y="268" font-family="serif" font-size="14" font-weight="700" fill="#8a6a00">后端服务层 · FastAPI + SQLAlchemy</text>
+
+        <g font-family="sans-serif" font-size="12" fill="#fff">
+          <rect x="40" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="120" y="318" text-anchor="middle" font-weight="600">Auth API</text>
+          <text x="120" y="338" text-anchor="middle" font-size="10" opacity="0.85">注册/登录</text>
+          <text x="120" y="358" text-anchor="middle" font-size="10" opacity="0.7">JWT Token</text>
+
+          <rect x="215" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="295" y="318" text-anchor="middle" font-weight="600">Policy API</text>
+          <text x="295" y="338" text-anchor="middle" font-size="10" opacity="0.85">政策列表</text>
+          <text x="295" y="358" text-anchor="middle" font-size="10" opacity="0.7">多维检索</text>
+
+          <rect x="390" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="470" y="313" text-anchor="middle" font-weight="700">Analysis API ⭐</text>
+          <text x="470" y="333" text-anchor="middle" font-size="10" opacity="0.85">智能评估</text>
+          <text x="470" y="353" text-anchor="middle" font-size="10" opacity="0.7">10 个端点</text>
+          <text x="470" y="370" text-anchor="middle" font-size="10" opacity="0.7">PDF 报告</text>
+
+          <rect x="565" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="645" y="318" text-anchor="middle" font-weight="600">Dashboard API</text>
+          <text x="645" y="338" text-anchor="middle" font-size="10" opacity="0.85">大屏数据</text>
+          <text x="645" y="358" text-anchor="middle" font-size="10" opacity="0.7">6 个端点</text>
+
+          <rect x="740" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="820" y="318" text-anchor="middle" font-weight="600">Mall API</text>
+          <text x="820" y="338" text-anchor="middle" font-size="10" opacity="0.85">商品/订单</text>
+          <text x="820" y="358" text-anchor="middle" font-size="10" opacity="0.7">商家上架</text>
+
+          <rect x="915" y="285" width="160" height="95" rx="8" fill="url(#beGrad)"/>
+          <text x="995" y="318" text-anchor="middle" font-weight="600">Case API</text>
+          <text x="995" y="338" text-anchor="middle" font-size="10" opacity="0.85">案例详情</text>
+          <text x="995" y="358" text-anchor="middle" font-size="10" opacity="0.7">模式标准</text>
+        </g>
+
+        <!-- 核心算法层 -->
+        <rect x="20" y="440" width="1060" height="130" rx="12" fill="url(#coreGrad)" opacity="0.1"/>
+        <text x="40" y="468" font-family="serif" font-size="14" font-weight="700" fill="#355e56">核心算法层 · Core Algorithms</text>
+
+        <g font-family="sans-serif" font-size="11" fill="#fff">
+          <rect x="40" y="485" width="190" height="70" rx="8" fill="url(#coreGrad)"/>
+          <text x="135" y="510" text-anchor="middle" font-weight="600">AHP 层次分析</text>
+          <text x="135" y="528" text-anchor="middle" font-size="10" opacity="0.85">indicators.py</text>
+          <text x="135" y="545" text-anchor="middle" font-size="10" opacity="0.7">26 项指标权重</text>
+
+          <rect x="245" y="485" width="190" height="70" rx="8" fill="url(#coreGrad)"/>
+          <text x="340" y="510" text-anchor="middle" font-weight="600">耦合协调度模型</text>
+          <text x="340" y="528" text-anchor="middle" font-size="10" opacity="0.85">ccd_model.py</text>
+          <text x="340" y="545" text-anchor="middle" font-size="10" opacity="0.7">10 级划分</text>
+
+          <rect x="450" y="485" width="190" height="70" rx="8" fill="url(#coreGrad)"/>
+          <text x="545" y="510" text-anchor="middle" font-weight="600">障碍度模型</text>
+          <text x="545" y="528" text-anchor="middle" font-size="10" opacity="0.85">obstacle.py</text>
+          <text x="545" y="545" text-anchor="middle" font-size="10" opacity="0.7">Top N 因子</text>
+
+          <rect x="655" y="485" width="190" height="70" rx="8" fill="url(#coreGrad)"/>
+          <text x="750" y="510" text-anchor="middle" font-weight="600">AI 智能建议</text>
+          <text x="750" y="528" text-anchor="middle" font-size="10" opacity="0.85">ai_advisor.py</text>
+          <text x="750" y="545" text-anchor="middle" font-size="10" opacity="0.7">DeepSeek 引擎</text>
+
+          <rect x="860" y="485" width="215" height="70" rx="8" fill="url(#coreGrad)"/>
+          <text x="967" y="510" text-anchor="middle" font-weight="600">模式数据</text>
+          <text x="967" y="528" text-anchor="middle" font-size="10" opacity="0.85">mode_data.py</text>
+          <text x="967" y="545" text-anchor="middle" font-size="10" opacity="0.7">5模式·27条建议·聚类</text>
+        </g>
+
+        <!-- 数据层 -->
+        <rect x="20" y="600" width="1060" height="100" rx="12" fill="url(#dataGrad)" opacity="0.08"/>
+        <text x="40" y="628" font-family="serif" font-size="14" font-weight="700" fill="#5e1429">数据层 · Data Storage</text>
+
+        <g font-family="sans-serif" font-size="12" fill="#fff">
+          <rect x="40" y="640" width="320" height="50" rx="8" fill="url(#dataGrad)"/>
+          <text x="200" y="663" text-anchor="middle" font-weight="600">数据库 · SQLite / MySQL</text>
+          <text x="200" y="680" text-anchor="middle" font-size="10" opacity="0.85">SQLAlchemy ORM</text>
+
+          <rect x="380" y="640" width="320" height="50" rx="8" fill="url(#dataGrad)"/>
+          <text x="540" y="663" text-anchor="middle" font-weight="600">PDF 报告 · reportlab</text>
+          <text x="540" y="680" text-anchor="middle" font-size="10" opacity="0.85">uploads/*.pdf</text>
+
+          <rect x="720" y="640" width="355" height="50" rx="8" fill="url(#dataGrad)"/>
+          <text x="897" y="663" text-anchor="middle" font-weight="600">DeepSeek AI · 大模型路径优化</text>
+          <text x="897" y="680" text-anchor="middle" font-size="10" opacity="0.85">OpenAI 兼容接口</text>
+        </g>
+
+        <!-- 连接箭头 -->
+        <line x1="550" y1="180" x2="550" y2="240" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="550" y1="380" x2="550" y2="440" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="550" y1="555" x2="550" y2="600" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+      </svg>
+      <div class="svg-caption">图 1 · 绿脉兴农系统架构图（四层架构）</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">技术栈</div>
+        <table>
+          <tr><th>层级</th><th>技术</th></tr>
+          <tr><td>前端框架</td><td>Vue 3 + Composition API</td></tr>
+          <tr><td>UI 组件</td><td>Element Plus</td></tr>
+          <tr><td>图表库</td><td>ECharts</td></tr>
+          <tr><td>构建工具</td><td>Vite</td></tr>
+          <tr><td>后端框架</td><td>FastAPI</td></tr>
+          <tr><td>ORM</td><td>SQLAlchemy</td></tr>
+          <tr><td>鉴权</td><td>JWT (python-jose + passlib)</td></tr>
+          <tr><td>AI 引擎</td><td>DeepSeek API</td></tr>
+          <tr><td>PDF 生成</td><td>reportlab</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">数据规模</div>
+        <table>
+          <tr><th>维度</th><th>规模</th></tr>
+          <tr><td>样本区县</td><td>10 个（苏浙皖川）</td></tr>
+          <tr><td>时间跨度</td><td>2020-2024（5 年）</td></tr>
+          <tr><td>发展模式</td><td>5 种（聚类分析）</td></tr>
+          <tr><td>评估指标</td><td>26 项（11+15）</td></tr>
+          <tr><td>准则层</td><td>8 个（3+5）</td></tr>
+          <tr><td>协调等级</td><td>10 级</td></tr>
+          <tr><td>路径建议</td><td>27 条（结构化）</td></tr>
+          <tr><td>政策数量</td><td>25+ 条</td></tr>
+          <tr><td>典型案例</td><td>5 个</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 核心方法论 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">METHODOLOGY</div>
+      <h2 class="section-title">核心方法论</h2>
+      <p class="section-subtitle">4 大数学模型 + 1 个 AI 引擎，构建从数据到决策的完整闭环</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="method-card">
+        <div class="method-num">01</div>
+        <h3>AHP 层次分析</h3>
+        <p>构建"目标层—准则层—指标层"三级递阶结构，通过专家判断矩阵计算组合权重。生态产品价值实现（11 项）+ 乡村振兴（15 项）共 26 项指标。</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">02</div>
+        <h3>熵权法</h3>
+        <p>基于 10 个区县 5 年面板数据的信息熵，客观赋权计算生态产品价值实现综合指数与乡村振兴综合指数，避免主观偏差。</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">03</div>
+        <h3>耦合协调度</h3>
+        <p>测算两大系统的耦合协调度 D∈[0,1]，划分 10 级协调等级（极度失调 → 优质协调），判定协调发展水平。</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">04</div>
+        <h3>障碍度模型</h3>
+        <p>识别制约生态产品价值实现与乡村振兴协同发展的关键障碍因子，按偏离度 × 权重排序，定位改进优先方向。</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h4>核心公式</h4>
+      <div class="formula">
+耦合度：    C = 2·√(U1·U2) / (U1 + U2)
+协调指数：  T = α·U1 + β·U2     (α=β=0.5)
+耦合协调度：D = √(C·T)
+
+障碍度：    O_i = (1 - X_i_norm) × W_i
+排序取 Top N：  按障碍度降序排列
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 五种模式示意图 ============ -->
+<section style="background: linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">FIVE PARADIGMS</div>
+      <h2 class="section-title">五种生态产品价值实现模式</h2>
+      <p class="section-subtitle">基于层次聚类分析，将 10 个典型区县划分为 5 种模式，因地制宜因势利导</p>
+    </div>
+
+    <div class="svg-card">
+      <svg viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#c79a00" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#c79a00" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- 中心 -->
+        <circle cx="550" cy="260" r="200" fill="url(#centerGrad)"/>
+        <circle cx="550" cy="260" r="60" fill="#0d3b2e"/>
+        <text x="550" y="252" text-anchor="middle" font-family="serif" font-size="14" font-weight="700" fill="#fff">10 个</text>
+        <text x="550" y="272" text-anchor="middle" font-family="serif" font-size="14" font-weight="700" fill="#fff">样本区县</text>
+        <text x="550" y="290" text-anchor="middle" font-family="monospace" font-size="10" fill="#c79a00">CLUSTERING</text>
+
+        <!-- 模式 1: 生态康养型 -->
+        <g>
+          <line x1="550" y1="200" x2="200" y2="100" stroke="#2d6a4f" stroke-width="2" stroke-dasharray="4,2"/>
+          <circle cx="200" cy="100" r="70" fill="#2d6a4f" opacity="0.15"/>
+          <circle cx="200" cy="100" r="50" fill="#2d6a4f"/>
+          <text x="200" y="95" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#fff">生态康养型</text>
+          <text x="200" y="112" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.9">FOREST</text>
+          <text x="200" y="180" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#2d6a4f" font-weight="600">黟县 · 蒲江</text>
+          <text x="200" y="195" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a5a5a">森林覆盖率 ≥65%</text>
+        </g>
+
+        <!-- 模式 2: 湿地水域型 -->
+        <g>
+          <line x1="550" y1="200" x2="900" y2="100" stroke="#4a90c2" stroke-width="2" stroke-dasharray="4,2"/>
+          <circle cx="900" cy="100" r="70" fill="#4a90c2" opacity="0.15"/>
+          <circle cx="900" cy="100" r="50" fill="#4a90c2"/>
+          <text x="900" y="95" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#fff">湿地水域型</text>
+          <text x="900" y="112" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.9">WATER</text>
+          <text x="900" y="180" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4a90c2" font-weight="600">合肥 · 雄安</text>
+          <text x="900" y="195" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a5a5a">水质达标率 ≥95%</text>
+        </g>
+
+        <!-- 模式 3: 农业品牌型 -->
+        <g>
+          <line x1="550" y1="320" x2="200" y2="420" stroke="#c79a00" stroke-width="2" stroke-dasharray="4,2"/>
+          <circle cx="200" cy="420" r="70" fill="#c79a00" opacity="0.15"/>
+          <circle cx="200" cy="420" r="50" fill="#c79a00"/>
+          <text x="200" y="415" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#fff">农业品牌型</text>
+          <text x="200" y="432" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.9">BRAND</text>
+          <text x="200" y="490" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#c79a00" font-weight="600">盱眙 · 兴化</text>
+          <text x="200" y="505" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a5a5a">粮食面积 ≥10万公顷</text>
+        </g>
+
+        <!-- 模式 4: 农文旅融合型 -->
+        <g>
+          <line x1="550" y1="320" x2="550" y2="420" stroke="#c97b5b" stroke-width="2" stroke-dasharray="4,2"/>
+          <circle cx="550" cy="420" r="70" fill="#c97b5b" opacity="0.15"/>
+          <circle cx="550" cy="420" r="50" fill="#c97b5b"/>
+          <text x="550" y="415" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#fff">农文旅融合型</text>
+          <text x="550" y="432" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.9">FUSION</text>
+          <text x="550" y="490" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#c97b5b" font-weight="600">五指山 · 嘉定</text>
+          <text x="550" y="505" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a5a5a">森林覆盖率 ≥15%</text>
+        </g>
+
+        <!-- 模式 5: 城郊消费型 -->
+        <g>
+          <line x1="550" y1="320" x2="900" y2="420" stroke="#8b1e3f" stroke-width="2" stroke-dasharray="4,2"/>
+          <circle cx="900" cy="420" r="70" fill="#8b1e3f" opacity="0.15"/>
+          <circle cx="900" cy="420" r="50" fill="#8b1e3f"/>
+          <text x="900" y="415" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#fff">城郊消费型</text>
+          <text x="900" y="432" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.9">SUBURBAN</text>
+          <text x="900" y="490" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#8b1e3f" font-weight="600">高淳 · 溧水</text>
+          <text x="900" y="505" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#5a5a5a">城镇化率 ≥70%</text>
+        </g>
+      </svg>
+      <div class="svg-caption">图 2 · 五种模式分布示意图（中心为 10 个样本区县，聚类为 5 类）</div>
+    </div>
+
+    <div class="grid-5">
+      <div class="mode-card">
+        <div class="mode-num">01</div>
+        <div class="mode-name">生态康养型</div>
+        <div class="mode-reps">黟县 · 蒲江</div>
+        <div class="mode-threshold">
+          <strong>识别阈值：</strong><br>
+          森林覆盖率 ≥65%<br>
+          城镇化率 ≤55%<br>
+          空气优良率 ≥80%
+        </div>
+        <div class="mode-path">
+          <strong>路径方向：</strong><br>
+          森林康养基地、气候疗养产品、康养小镇品牌
+        </div>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-num">02</div>
+        <div class="mode-name">湿地水域型</div>
+        <div class="mode-reps">合肥 · 雄安</div>
+        <div class="mode-threshold">
+          <strong>识别阈值：</strong><br>
+          水质达标率 ≥95%<br>
+          重要生态保护区面积突出
+        </div>
+        <div class="mode-path">
+          <strong>路径方向：</strong><br>
+          湿地公园、保水渔业、水权交易、碳汇交易
+        </div>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-num">03</div>
+        <div class="mode-name">农业品牌型</div>
+        <div class="mode-reps">盱眙 · 兴化</div>
+        <div class="mode-threshold">
+          <strong>识别阈值：</strong><br>
+          粮食播种面积 ≥10万公顷<br>
+          农产品产出 ≥90万吨
+        </div>
+        <div class="mode-path">
+          <strong>路径方向：</strong><br>
+          区域公用品牌、三品一标、精深加工产业链
+        </div>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-num">04</div>
+        <div class="mode-name">农文旅融合型</div>
+        <div class="mode-reps">五指山 · 嘉定</div>
+        <div class="mode-threshold">
+          <strong>识别阈值：</strong><br>
+          森林覆盖率 ≥15%<br>
+          空气优良率 ≥80%<br>
+          文化资源丰富
+        </div>
+        <div class="mode-path">
+          <strong>路径方向：</strong><br>
+          研学线路、文创工坊、乡村节庆、特色民宿
+        </div>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-num">05</div>
+        <div class="mode-name">城郊消费型</div>
+        <div class="mode-reps">高淳 · 溧水</div>
+        <div class="mode-threshold">
+          <strong>识别阈值：</strong><br>
+          城镇化率 ≥70%<br>
+          GDP ≥1000亿<br>
+          农村人均收入 ≥4万元
+        </div>
+        <div class="mode-path">
+          <strong>路径方向：</strong><br>
+          都市农园、采摘体验、城郊综合体、周末经济
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 评估流程图 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">WORKFLOW</div>
+      <h2 class="section-title">智能评估流程</h2>
+      <p class="section-subtitle">五步生成专业评估报告，从数据上传到 PDF 导出完整闭环</p>
+    </div>
+
+    <div class="svg-card">
+      <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="stepGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0d3b2e"/>
+            <stop offset="100%" stop-color="#2d6a4f"/>
+          </linearGradient>
+          <marker id="arrowBig" markerWidth="14" markerHeight="14" refX="12" refY="5" orient="auto">
+            <polygon points="0,0 14,5 0,10" fill="#c79a00"/>
+          </marker>
+        </defs>
+
+        <!-- 步骤 1 -->
+        <g>
+          <rect x="40" y="120" width="160" height="120" rx="12" fill="url(#stepGrad)"/>
+          <circle cx="120" cy="155" r="22" fill="#c79a00"/>
+          <text x="120" y="161" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#fff">01</text>
+          <text x="120" y="200" text-anchor="middle" font-family="serif" font-size="15" font-weight="700" fill="#fff">上传数据</text>
+          <text x="120" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff" opacity="0.85">11+15 项指标</text>
+        </g>
+        <line x1="200" y1="180" x2="240" y2="180" stroke="#c79a00" stroke-width="3" marker-end="url(#arrowBig)"/>
+
+        <!-- 步骤 2 -->
+        <g>
+          <rect x="245" y="120" width="160" height="120" rx="12" fill="url(#stepGrad)"/>
+          <circle cx="325" cy="155" r="22" fill="#c79a00"/>
+          <text x="325" y="161" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#fff">02</text>
+          <text x="325" y="200" text-anchor="middle" font-family="serif" font-size="15" font-weight="700" fill="#fff">模型评估</text>
+          <text x="325" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff" opacity="0.85">AHP+CCD+障碍度</text>
+        </g>
+        <line x1="405" y1="180" x2="445" y2="180" stroke="#c79a00" stroke-width="3" marker-end="url(#arrowBig)"/>
+
+        <!-- 步骤 3 -->
+        <g>
+          <rect x="450" y="120" width="160" height="120" rx="12" fill="url(#stepGrad)"/>
+          <circle cx="530" cy="155" r="22" fill="#c79a00"/>
+          <text x="530" y="161" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#fff">03</text>
+          <text x="530" y="200" text-anchor="middle" font-family="serif" font-size="15" font-weight="700" fill="#fff">AI 模式识别</text>
+          <text x="530" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff" opacity="0.85">DeepSeek 判定</text>
+        </g>
+        <line x1="610" y1="180" x2="650" y2="180" stroke="#c79a00" stroke-width="3" marker-end="url(#arrowBig)"/>
+
+        <!-- 步骤 4 -->
+        <g>
+          <rect x="655" y="120" width="160" height="120" rx="12" fill="url(#stepGrad)"/>
+          <circle cx="735" cy="155" r="22" fill="#c79a00"/>
+          <text x="735" y="161" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#fff">04</text>
+          <text x="735" y="200" text-anchor="middle" font-family="serif" font-size="15" font-weight="700" fill="#fff">路径优化</text>
+          <text x="735" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff" opacity="0.85">27 条 + AI 建议</text>
+        </g>
+        <line x1="815" y1="180" x2="855" y2="180" stroke="#c79a00" stroke-width="3" marker-end="url(#arrowBig)"/>
+
+        <!-- 步骤 5 -->
+        <g>
+          <rect x="860" y="120" width="200" height="120" rx="12" fill="#c79a00"/>
+          <circle cx="940" cy="155" r="22" fill="#0d3b2e"/>
+          <text x="940" y="161" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#fff">05</text>
+          <text x="940" y="200" text-anchor="middle" font-family="serif" font-size="15" font-weight="700" fill="#fff">PDF 报告</text>
+          <text x="940" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff" opacity="0.9">reportlab 生成</text>
+        </g>
+
+        <!-- 底部说明 -->
+        <text x="120" y="280" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#5a5a5a">按模板录入地区数据</text>
+        <text x="325" y="280" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#5a5a5a">加权评分+耦合协调度</text>
+        <text x="530" y="280" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#5a5a5a">判定 5 种模式之一</text>
+        <text x="735" y="280" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#5a5a5a">差异化发展策略</text>
+        <text x="940" y="280" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#5a5a5a">含图表与建议</text>
+
+        <text x="550" y="330" text-anchor="middle" font-family="serif" font-size="13" font-weight="600" fill="#0d3b2e">END-TO-END ASSESSMENT WORKFLOW</text>
+      </svg>
+      <div class="svg-caption">图 3 · 智能评估五步工作流</div>
+    </div>
+
+    <div class="highlight-box">
+      <h4>核心评估流程</h4>
+      <p style="color: var(--ink-2); line-height: 2;">
+        <strong style="color: var(--forest);">1. 上传数据：</strong>用户按指标模板录入地区生态、经济、社会数据（11+15 项指标），支持"加载模板"一键填充指标结构。<br>
+        <strong style="color: var(--forest);">2. 模型评估：</strong>系统自动调用 AHP 加权综合评分、耦合协调度模型、障碍度模型，计算生态得分（0-100）、乡村振兴得分（0-100）、D 值（0-1）、Top N 障碍因子。<br>
+        <strong style="color: var(--forest);">3. AI 模式识别：</strong>基于规则匹配 + DeepSeek 大模型，判定地区所属发展模式（5 种之一），输出识别理由。<br>
+        <strong style="color: var(--forest);">4. 路径优化：</strong>输出该模式的 27 条结构化建议 + DeepSeek 生成的 500-800 字综合建议，覆盖产业、生态、治理等维度。<br>
+        <strong style="color: var(--forest);">5. PDF 报告：</strong>调用 reportlab 生成专业评估报告，含综合得分、雷达图、障碍图、模式判定、路径建议，便于汇报归档。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 功能模块 ============ -->
+<section style="background: linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">CORE MODULES</div>
+      <h2 class="section-title">六大功能模块</h2>
+      <p class="section-subtitle">从政策检索到落地实施，一站式赋能乡村振兴</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="feature-card">
+        <div class="feature-icon">政</div>
+        <h3>政策中心</h3>
+        <div class="path">/policy · PolicyView</div>
+        <p>汇集国家级、省级、地市级乡村振兴与生态产品价值实现政策，支持主题分类、级别筛选、关键词多维检索，提供政策总数、各级别数量统计概览。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">析</div>
+        <h3>智能分析中心</h3>
+        <div class="path">/analysis · AnalysisView ⭐</div>
+        <p>平台核心模块，3 标签页架构：综合评估（4 模型评估+AI 识别+路径优化+PDF 报告）、模式识别标准（5 模式量化阈值）、耦合协调度计算工具（独立计算器+仪表盘）。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">屏</div>
+        <h3>数据大屏</h3>
+        <div class="path">/dashboard · DashboardView</div>
+        <p>10 区县 5 年面板数据多维可视化：横向对比柱状图、时间演化折线图、模式雷达图、耦合散点图、AHP 权重条形图、聚类散点图，支持指标与年份切换。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">商</div>
+        <h3>农产品商城</h3>
+        <div class="path">/mall · MallView</div>
+        <p>面向农户与合作社的生态农产品展示与交易平台：分类筛选、关键词搜索、商品卡片、购物车抽屉、数量调整、订单结算，商家角色可上架自有商品。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">案</div>
+        <h3>案例中心</h3>
+        <div class="path">/case · CaseView</div>
+        <p>5 种模式典型案例展示与学习：模式标签筛选、案例卡片、3 标签页详情弹窗（案例详情+模式识别标准+路径优化建议），便于借鉴成功经验。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">户</div>
+        <h3>用户中心</h3>
+        <div class="path">/user · UserView</div>
+        <p>注册 / 登录 / 个人面板：双标签页登录注册（支持普通用户与商家角色）、JWT 无状态鉴权、评估历史记录、政策收藏、订单管理。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 智能分析中心详解 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">ANALYSIS CENTER</div>
+      <h2 class="section-title">智能分析中心 · 核心模块</h2>
+      <p class="section-subtitle">3 标签页架构，覆盖完整评估闭环</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Tab 1 · 综合评估</div>
+        <p style="margin-bottom: 16px; color: var(--ink-2);">完整的智能评估工作流，左侧录入数据，右侧展示结果。</p>
+        <h4 style="color: var(--forest); margin: 16px 0 8px; font-family: serif;">输入区</h4>
+        <ul class="feature-list">
+          <li>地区名称、评估年份</li>
+          <li>11 项生态产品价值实现指标</li>
+          <li>15 项乡村振兴水平指标</li>
+          <li>"加载模板"一键填充</li>
+        </ul>
+        <h4 style="color: var(--forest); margin: 16px 0 8px; font-family: serif;">结果展示区</h4>
+        <ul class="feature-list">
+          <li>综合得分卡（双系统进度条）</li>
+          <li>耦合协调度 D 值 + 等级标签</li>
+          <li>AI 模式识别结果 + 识别理由</li>
+          <li>模式识别标准（特征+要素+阈值表）</li>
+          <li>8 维度雷达图（双系统对比）</li>
+          <li>Top 5 障碍因子横向条形图</li>
+          <li>27 条结构化路径优化建议</li>
+          <li>DeepSeek AI 综合建议</li>
+          <li>PDF 报告一键导出</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tab 2 · 模式识别标准</div>
+        <p style="margin-bottom: 16px; color: var(--ink-2);">5 种生态产品价值实现模式的量化识别标准展示，使用手风琴折叠面板。</p>
+        <h4 style="color: var(--forest); margin: 16px 0 8px; font-family: serif;">每种模式包含</h4>
+        <ul class="feature-list">
+          <li>代表区县（如生态康养型代表黟县、蒲江）</li>
+          <li>模式定义（业态描述）</li>
+          <li>模式特点（资源依赖性、产业延伸性等标签）</li>
+          <li>核心要素（自然资源本底、产业链延伸等要点）</li>
+          <li>识别阈值表（指标/运算符/阈值/单位/是否必需）</li>
+        </ul>
+        <div class="highlight-box" style="margin-top: 20px;">
+          <h4>阈值示例</h4>
+          <p style="font-size: 13px; color: var(--ink-2);">
+            生态康养型：森林覆盖率 ≥65%（必需）、城镇化率 ≤55%（必需）、空气优良率 ≥80%（必需）、农产品产出 ≥30万吨（可选）
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tab 3 · 耦合协调度工具</div>
+        <p style="margin-bottom: 16px; color: var(--ink-2);">独立的耦合协调度计算器，无需上传完整数据即可快速测算。</p>
+        <h4 style="color: var(--forest); margin: 16px 0 8px; font-family: serif;">功能要点</h4>
+        <ul class="feature-list">
+          <li>双输入：U1（生态得分 0-100）+ U2（振兴得分 0-100）</li>
+          <li>实时计算：输出 C、T、D 三个值 + 等级标签</li>
+          <li>ECharts 仪表盘：动态显示 D 值落点</li>
+          <li>10 级划分标准网格展示</li>
+          <li>当前等级高亮显示</li>
+        </ul>
+        <div class="formula" style="margin-top: 20px;">
+C = 2√(U1·U2)/(U1+U2)
+T = α·U1 + β·U2
+D = √(C·T)
+α = β = 0.5
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 耦合协调度等级 ============ -->
+<section style="background: linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">COORDINATION LEVELS</div>
+      <h2 class="section-title">耦合协调度 10 级划分</h2>
+      <p class="section-subtitle">从极度失调到优质协调，量化判定两大系统协同发展水平</p>
+    </div>
+
+    <div class="svg-card">
+      <svg viewBox="0 0 1100 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="levelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#8b1e3f"/>
+            <stop offset="30%" stop-color="#c97b5b"/>
+            <stop offset="50%" stop-color="#c79a00"/>
+            <stop offset="70%" stop-color="#52796f"/>
+            <stop offset="100%" stop-color="#0d3b2e"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 渐变条 -->
+        <rect x="40" y="80" width="1020" height="40" rx="6" fill="url(#levelGrad)"/>
+
+        <!-- 刻度 -->
+        <g font-family="monospace" font-size="11" fill="#5a5a5a">
+          <text x="40" y="145" text-anchor="middle">0.0</text>
+          <text x="142" y="145" text-anchor="middle">0.1</text>
+          <text x="244" y="145" text-anchor="middle">0.2</text>
+          <text x="346" y="145" text-anchor="middle">0.3</text>
+          <text x="448" y="145" text-anchor="middle">0.4</text>
+          <text x="550" y="145" text-anchor="middle">0.5</text>
+          <text x="652" y="145" text-anchor="middle">0.6</text>
+          <text x="754" y="145" text-anchor="middle">0.7</text>
+          <text x="856" y="145" text-anchor="middle">0.8</text>
+          <text x="958" y="145" text-anchor="middle">0.9</text>
+          <text x="1060" y="145" text-anchor="middle">1.0</text>
+        </g>
+
+        <!-- 等级标签 -->
+        <g font-family="serif" font-size="11" font-weight="600" fill="#fff">
+          <rect x="40" y="170" width="100" height="22" rx="3" fill="#8b1e3f"/>
+          <text x="90" y="185" text-anchor="middle">极度失调</text>
+
+          <rect x="142" y="170" width="100" height="22" rx="3" fill="#a83048"/>
+          <text x="192" y="185" text-anchor="middle">严重失调</text>
+
+          <rect x="244" y="170" width="100" height="22" rx="3" fill="#c45560"/>
+          <text x="294" y="185" text-anchor="middle">中度失调</text>
+
+          <rect x="346" y="170" width="100" height="22" rx="3" fill="#c97b5b"/>
+          <text x="396" y="185" text-anchor="middle">轻度失调</text>
+
+          <rect x="448" y="170" width="100" height="22" rx="3" fill="#d4a017"/>
+          <text x="498" y="185" text-anchor="middle">濒临失调</text>
+
+          <rect x="550" y="170" width="100" height="22" rx="3" fill="#c79a00"/>
+          <text x="600" y="185" text-anchor="middle">勉强协调</text>
+
+          <rect x="652" y="170" width="100" height="22" rx="3" fill="#7a9b6f"/>
+          <text x="702" y="185" text-anchor="middle">初级协调</text>
+
+          <rect x="754" y="170" width="100" height="22" rx="3" fill="#52796f"/>
+          <text x="804" y="185" text-anchor="middle">中级协调</text>
+
+          <rect x="856" y="170" width="100" height="22" rx="3" fill="#2d6a4f"/>
+          <text x="906" y="185" text-anchor="middle">良好协调</text>
+
+          <rect x="958" y="170" width="102" height="22" rx="3" fill="#0d3b2e"/>
+          <text x="1009" y="185" text-anchor="middle">优质协调</text>
+        </g>
+
+        <!-- 左右标签 -->
+        <text x="40" y="60" font-family="serif" font-size="14" font-weight="700" fill="#8b1e3f">失调区间</text>
+        <text x="550" y="60" font-family="serif" font-size="14" font-weight="700" fill="#c79a00">临界</text>
+        <text x="958" y="60" font-family="serif" font-size="14" font-weight="700" fill="#0d3b2e">协调区间</text>
+
+        <!-- 箭头 -->
+        <text x="550" y="220" text-anchor="middle" font-family="monospace" font-size="11" fill="#8a8a8a">D 值越大，耦合协调度越高 →</text>
+      </svg>
+      <div class="svg-caption">图 4 · 耦合协调度 10 级划分标准</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 指标体系 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">INDICATOR SYSTEM</div>
+      <h2 class="section-title">26 项核心指标体系</h2>
+      <p class="section-subtitle">基于 AHP 层次分析的两级递阶指标体系，11+15 项指标覆盖 8 个准则层</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">生态产品价值实现成效（11 项）</div>
+        <table>
+          <thead>
+            <tr><th>指标</th><th>准则层</th><th>权重</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>重要生态功能保护区面积</td><td>生态效益</td><td>0.1283</td></tr>
+            <tr><td>主要水体水质断面达标率</td><td>生态效益</td><td>0.0074</td></tr>
+            <tr><td>空气环境质量优良率</td><td>生态效益</td><td>0.0889</td></tr>
+            <tr><td>地区生产总值</td><td>经济效益</td><td>0.2676</td></tr>
+            <tr><td>全区粮食播种面积</td><td>经济效益</td><td>0.1978</td></tr>
+            <tr><td>农产品产出</td><td>经济效益</td><td>0.1738</td></tr>
+            <tr><td>常住人口城镇化率</td><td>社会效益</td><td>0.0066</td></tr>
+            <tr><td>新增就业人数</td><td>社会效益</td><td>0.0486</td></tr>
+            <tr><td>农村居民人均可支配收入</td><td>社会效益</td><td>0.0346</td></tr>
+            <tr><td>城乡低保标准</td><td>社会效益</td><td>0.0161</td></tr>
+            <tr><td>一般公共服务支出</td><td>社会效益</td><td>0.0304</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">乡村振兴水平（15 项）</div>
+        <table>
+          <thead>
+            <tr><th>指标</th><th>维度</th><th>权重</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>粮食总产量</td><td>产业兴旺</td><td>0.2140</td></tr>
+            <tr><td>农业机械总动力/播种面积</td><td>产业兴旺</td><td>0.0288</td></tr>
+            <tr><td>农林牧渔业总产值</td><td>产业兴旺</td><td>0.1868</td></tr>
+            <tr><td>森林覆盖率</td><td>生态宜居</td><td>0.0416</td></tr>
+            <tr><td>污水处理厂集中处理率</td><td>生态宜居</td><td>0.0211</td></tr>
+            <tr><td>农村卫生厕所普及率</td><td>生态宜居</td><td>0.0091</td></tr>
+            <tr><td>普通中学专任教师数/学生数</td><td>乡风文明</td><td>0.0355</td></tr>
+            <tr><td>图书馆个数</td><td>乡风文明</td><td>0.0428</td></tr>
+            <tr><td>固定互联网宽带接入用户</td><td>乡风文明</td><td>0.0274</td></tr>
+            <tr><td>农林水事务支出占比</td><td>治理有效</td><td>0.0545</td></tr>
+            <tr><td>卫生室/卫生机构数量</td><td>治理有效</td><td>0.0217</td></tr>
+            <tr><td>三种专利申请授权量</td><td>治理有效</td><td>0.1352</td></tr>
+            <tr><td>农村人均可支配收入</td><td>生活富裕</td><td>0.1012</td></tr>
+            <tr><td>农村人均消费支出</td><td>生活富裕</td><td>0.0378</td></tr>
+            <tr><td>人均道路面积</td><td>生活富裕</td><td>0.0424</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ API 接口 ============ -->
+<section style="background: linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">API ENDPOINTS</div>
+      <h2 class="section-title">API 接口总览</h2>
+      <p class="section-subtitle">6 个路由模块，30+ 个 RESTful 端点，FastAPI 自动生成文档</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">智能分析 API · analysis.py ⭐</div>
+        <table>
+          <thead>
+            <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>/analysis/template</td><td>GET</td><td>获取指标模板</td></tr>
+            <tr><td>/analysis/assess</td><td>POST</td><td>智能评估（核心）</td></tr>
+            <tr><td>/analysis/{id}/report</td><td>GET</td><td>生成 PDF 报告</td></tr>
+            <tr><td>/analysis/mode-criteria</td><td>GET</td><td>5 种模式识别标准</td></tr>
+            <tr><td>/analysis/mode-suggestions/{mode}</td><td>GET</td><td>模式路径建议</td></tr>
+            <tr><td>/analysis/ahp-weights</td><td>GET</td><td>AHP 组合权重</td></tr>
+            <tr><td>/analysis/cluster-results</td><td>GET</td><td>10 区县聚类结果</td></tr>
+            <tr><td>/analysis/coordination-levels</td><td>GET</td><td>10 级协调等级</td></tr>
+            <tr><td>/analysis/coupling-calculate</td><td>GET</td><td>耦合协调度计算</td></tr>
+            <tr><td>/analysis/obstacle-diagnose</td><td>POST</td><td>障碍因子诊断</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">其他模块 API</div>
+        <table>
+          <thead>
+            <tr><th>模块</th><th>端点示例</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Auth</td><td>/auth/login</td><td>JWT 鉴权</td></tr>
+            <tr><td>Auth</td><td>/auth/register</td><td>用户注册</td></tr>
+            <tr><td>Policy</td><td>/policy/list</td><td>政策列表</td></tr>
+            <tr><td>Dashboard</td><td>/dashboard/compare</td><td>横向对比</td></tr>
+            <tr><td>Dashboard</td><td>/dashboard/weights</td><td>AHP 权重</td></tr>
+            <tr><td>Dashboard</td><td>/dashboard/cluster</td><td>聚类散点</td></tr>
+            <tr><td>Mall</td><td>/mall/products</td><td>商品列表</td></tr>
+            <tr><td>Mall</td><td>/mall/orders</td><td>创建订单</td></tr>
+            <tr><td>Case</td><td>/case/list</td><td>案例列表</td></tr>
+            <tr><td>Case</td><td>/case/{id}/suggestions</td><td>案例模式建议</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 参赛信息 ============ -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-eyebrow">COMPETITION INFO</div>
+      <h2 class="section-title">参赛信息</h2>
+    </div>
+
+    <div class="card" style="text-align: center;">
+      <div style="font-family: 'Songti SC', serif; font-size: 28px; color: var(--forest); font-weight: 700; margin-bottom: 16px;">
+        让"绿水青山"看得见、算得清、走得通
+      </div>
+      <div style="color: var(--ink-2); font-size: 15px; margin-bottom: 32px;">
+        生态产品价值实现赋能乡村振兴一体化智能系统
+      </div>
+
+      <div class="grid-3" style="text-align: left;">
+        <div>
+          <div class="section-eyebrow" style="text-align: left;">赛事</div>
+          <p style="color: var(--ink); font-size: 14px;">中国研究生乡村振兴科技强农+创新大赛</p>
+        </div>
+        <div>
+          <div class="section-eyebrow" style="text-align: left;">团队</div>
+          <p style="color: var(--ink); font-size: 14px;">南京师范大学 · 绿脉兴农团队</p>
+        </div>
+        <div>
+          <div class="section-eyebrow" style="text-align: left;">作品</div>
+          <p style="color: var(--ink); font-size: 14px;">生态产品价值实现赋能乡村振兴一体化智能系统</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 页脚 ============ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-mark">绿脉兴农</div>
+      <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 6px; line-height: 1.5;">
+        生态产品价值实现赋能乡村振兴一体化智能系统
+      </div>
+      <p class="footer-tag">让"绿水青山"看得见、算得清、走得通</p>
+    </div>
+    <div>
+      <div class="footer-title">核心方法论</div>
+      <p class="footer-line">AHP 层次分析 · 组合权重</p>
+      <p class="footer-line">熵权法 · 客观赋权</p>
+      <p class="footer-line">耦合协调度模型 · D 值</p>
+      <p class="footer-line">障碍度模型 · 因子识别</p>
+    </div>
+    <div>
+      <div class="footer-title">参赛信息</div>
+      <p class="footer-line">中国研究生乡村振兴科技强农+创新大赛</p>
+      <p class="footer-line">南京师范大学 · 绿脉兴农团队</p>
+      <p class="footer-line">作品编号：2024S01</p>
+    </div>
+    <div>
+      <div class="footer-title">技术架构</div>
+      <p class="footer-line">Vue 3 + Element Plus</p>
+      <p class="footer-line">FastAPI + SQLAlchemy</p>
+      <p class="footer-line">DeepSeek AI + ECharts</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 绿脉兴农 · ALL RIGHTS RESERVED</span>
+    <span>v1.0 · BUILT FOR RURAL REVITALIZATION</span>
+  </div>
+</footer>
+
+</body>
+</html>
