@@ -95,6 +95,24 @@
         </div>
         <div ref="scatterChartRef" class="chart-box"></div>
       </div>
+
+      <!-- AHP权重可视化 -->
+      <div class="chart-card gp-anim-fade-up">
+        <div class="chart-header">
+          <h3 class="chart-title">AHP层次分析法组合权重分布</h3>
+          <span class="chart-subtitle">两个指标体系 · 按准则层分色</span>
+        </div>
+        <div ref="weightsChartRef" class="chart-box chart-box-tall"></div>
+      </div>
+
+      <!-- 聚类散点图：主成分降维 -->
+      <div class="chart-card gp-anim-fade-up">
+        <div class="chart-header">
+          <h3 class="chart-title">层次聚类分析结果（主成分降维散点图）</h3>
+          <span class="chart-subtitle">按模式分色 · X=PC1, Y=PC2</span>
+        </div>
+        <div ref="clusterChartRef" class="chart-box"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -108,13 +126,17 @@ const metric = ref('eco_score')
 const year = ref(2024)
 const compareData = ref([])
 const overviewData = ref([])
+const weightsData = ref({})
+const clusterData = ref([])
 
 const barChartRef = ref(null)
 const lineChartRef = ref(null)
 const radarChartRef = ref(null)
 const scatterChartRef = ref(null)
+const weightsChartRef = ref(null)
+const clusterChartRef = ref(null)
 
-let barChart, lineChart, radarChart, scatterChart
+let barChart, lineChart, radarChart, scatterChart, weightsChart, clusterChart
 
 const metricMap = {
   eco_score: '生态得分',
@@ -142,6 +164,22 @@ const modeColors = [
 
 function getModeColor(mode) {
   return modeColors.find(m => m.mode === mode)?.color || '#666'
+}
+
+// AHP 准则层配色（生态产品价值实现 3 层 + 乡村振兴 5 层）
+const criteriaColors = {
+  '生态效益': '#1b5e20',
+  '经济效益': '#c79a00',
+  '社会效益': '#0277bd',
+  '产业兴旺': '#6a1b9a',
+  '生态宜居': '#00838f',
+  '乡风文明': '#8b1e3f',
+  '治理有效': '#e65100',
+  '生活富裕': '#5d4037',
+}
+
+function getCriteriaColor(name) {
+  return criteriaColors[name] || '#666'
 }
 
 async function loadCompare() {
@@ -182,6 +220,24 @@ async function loadTimeline() {
   }
   await nextTick()
   renderLine(years, series)
+}
+
+async function loadWeights() {
+  try {
+    const res = await request.get('/dashboard/weights')
+    weightsData.value = res || {}
+    await nextTick()
+    renderWeights()
+  } catch (e) {}
+}
+
+async function loadCluster() {
+  try {
+    const res = await request.get('/dashboard/cluster')
+    clusterData.value = res.items || []
+    await nextTick()
+    renderCluster()
+  } catch (e) {}
 }
 
 function renderBar() {
@@ -283,17 +339,139 @@ function renderScatter() {
   }, true)
 }
 
+function renderWeights() {
+  if (!weightsChart) weightsChart = echarts.init(weightsChartRef.value)
+  const data = weightsData.value
+  // 按体系顺序收集所有指标，保持准则层分组顺序
+  const systems = ['生态产品价值实现', '乡村振兴']
+  const allItems = []
+  for (const sys of systems) {
+    if (!data[sys]) continue
+    for (const criteria of Object.keys(data[sys])) {
+      for (const item of (data[sys][criteria] || [])) {
+        allItems.push({
+          name: item.indicator,
+          system: sys,
+          criteria,
+          weight: item.weight,
+          attribute: item.attribute,
+        })
+      }
+    }
+  }
+  // Y 轴标签（先收集，再反转用于自上而下展示）
+  const yLabels = allItems.map(it => it.name)
+  // 准则层去重，保留出现顺序
+  const criteriaSet = []
+  for (const it of allItems) {
+    if (!criteriaSet.includes(it.criteria)) criteriaSet.push(it.criteria)
+  }
+  // 每个准则层一个 series，便于图例切换与配色
+  const series = criteriaSet.map(criteria => ({
+    name: criteria,
+    type: 'bar',
+    stack: 'ahp',
+    // 反转数据，使第一个指标显示在顶部
+    data: allItems.slice().reverse().map(it =>
+      it.criteria === criteria ? Number(it.weight) : null
+    ),
+    itemStyle: { color: getCriteriaColor(criteria) },
+    label: {
+      show: true,
+      position: 'right',
+      formatter: p => (p.value != null ? Number(p.value).toFixed(4) : ''),
+      fontSize: 10,
+    },
+  }))
+  weightsChart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: params => {
+        const p = params.find(p => p.value != null)
+        if (!p) return ''
+        const idx = allItems.length - 1 - p.dataIndex
+        const it = allItems[idx]
+        if (!it) return ''
+        const attr = it.attribute === '+' ? '正向(+)效益' : (it.attribute === '-' ? '负向(-)效益' : `属性: ${it.attribute}`)
+        return `${it.name}<br/>指标体系: ${it.system}<br/>准则层: ${it.criteria}<br/>${attr}<br/>组合权重: ${Number(it.weight).toFixed(4)}`
+      },
+    },
+    legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    grid: { left: '3%', right: '8%', bottom: '12%', containLabel: true },
+    xAxis: {
+      type: 'value',
+      name: '组合权重',
+      axisLabel: { fontSize: 11 },
+    },
+    yAxis: {
+      type: 'category',
+      data: yLabels.slice().reverse(),
+      axisLabel: { fontSize: 11 },
+    },
+    series,
+  }, true)
+}
+
+function renderCluster() {
+  if (!clusterChart) clusterChart = echarts.init(clusterChartRef.value)
+  const items = clusterData.value || []
+  // 按 mode_type 分组
+  const byMode = {}
+  for (const it of items) {
+    const mode = it.mode_type || `簇${it.cluster}`
+    if (!byMode[mode]) byMode[mode] = []
+    byMode[mode].push([
+      Number(it.pc1),
+      Number(it.pc2),
+      it.region,
+      it.cluster,
+      it.mode_type,
+    ])
+  }
+  const series = Object.entries(byMode).map(([mode, arr]) => ({
+    name: mode,
+    type: 'scatter',
+    data: arr,
+    symbolSize: 16,
+    itemStyle: { color: getModeColor(mode) },
+    label: {
+      show: true,
+      position: 'right',
+      formatter: p => String(p.data[2] || '').replace(/省|市|区|县/g, '').slice(0, 6),
+      fontSize: 10,
+    },
+  }))
+  clusterChart.setOption({
+    tooltip: {
+      formatter: p => {
+        const d = p.data
+        return `${d[2]}<br/>模式: ${d[4] || p.seriesName}<br/>聚类簇: ${d[3]}<br/>PC1: ${Number(d[0]).toFixed(3)}<br/>PC2: ${Number(d[1]).toFixed(3)}`
+      },
+    },
+    legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    grid: { left: '3%', right: '8%', bottom: '15%', containLabel: true },
+    xAxis: { type: 'value', name: 'PC1', axisLabel: { fontSize: 11 } },
+    yAxis: { type: 'value', name: 'PC2', axisLabel: { fontSize: 11 } },
+    series,
+  }, true)
+}
+
 function handleResize() {
   barChart?.resize()
   lineChart?.resize()
   radarChart?.resize()
   scatterChart?.resize()
+  weightsChart?.resize()
+  clusterChart?.resize()
 }
 
 onMounted(async () => {
   await loadCompare()
   await loadOverview()
   await loadTimeline()
+  await loadWeights()
+  await loadCluster()
   window.addEventListener('resize', handleResize)
 })
 </script>
@@ -449,9 +627,14 @@ onMounted(async () => {
   height: 420px;
 }
 
+.chart-box-tall {
+  height: 640px;
+}
+
 @media (max-width: 768px) {
   .controls { flex-direction: column; align-items: stretch; gap: 12px; }
   .stat-cards { grid-template-columns: repeat(2, 1fr); }
   .chart-box { height: 320px; }
+  .chart-box-tall { height: 480px; }
 }
 </style>

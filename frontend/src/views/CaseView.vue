@@ -64,19 +64,103 @@
 
     <!-- 详情弹窗 -->
     <el-dialog v-model="dialogVisible" :title="current?.title" width="60%" class="case-dialog">
-      <div v-if="current" class="dialog-content">
-        <div class="dialog-meta">
-          <span class="gp-chip gp-chip-gold">{{ current.mode_type }}</span>
-          <span class="meta-item"><el-icon><Location /></el-icon> {{ current.region }}</span>
-        </div>
-        <div class="dialog-body">{{ current.content }}</div>
+      <div v-if="current" class="dialog-content" v-loading="detailLoading">
+        <el-tabs v-model="activeTab" class="case-tabs">
+          <!-- 标签页1：案例详情 -->
+          <el-tab-pane label="案例详情" name="detail">
+            <div class="dialog-meta">
+              <span class="gp-chip gp-chip-gold">{{ current.mode_type }}</span>
+              <span class="meta-item" v-if="current.region">
+                <el-icon><Location /></el-icon> {{ current.region }}
+              </span>
+            </div>
+            <div class="dialog-body">{{ current.content }}</div>
+          </el-tab-pane>
+
+          <!-- 标签页2：模式识别标准 -->
+          <el-tab-pane label="模式识别标准" name="criteria">
+            <div v-if="criteria" class="criteria-content">
+              <div v-if="criteria.definition" class="criteria-section">
+                <div class="section-label">模式定义</div>
+                <div class="criteria-definition">{{ criteria.definition }}</div>
+              </div>
+
+              <div v-if="criteria.representatives?.length" class="criteria-section">
+                <div class="section-label">代表地区</div>
+                <div class="char-tags">
+                  <span v-for="(r, i) in criteria.representatives" :key="i" class="gp-chip gp-chip-forest">
+                    {{ r }}
+                  </span>
+                </div>
+              </div>
+
+              <div v-if="criteria.characteristics?.length" class="criteria-section">
+                <div class="section-label">模式特点</div>
+                <div class="char-tags">
+                  <el-tag
+                    v-for="(ch, i) in criteria.characteristics"
+                    :key="i"
+                    type="success"
+                    effect="plain"
+                    class="char-tag"
+                  >
+                    {{ ch }}
+                  </el-tag>
+                </div>
+              </div>
+
+              <div v-if="criteria.core_elements?.length" class="criteria-section">
+                <div class="section-label">核心要素</div>
+                <ul class="core-list">
+                  <li v-for="(el, i) in criteria.core_elements" :key="i">{{ el }}</li>
+                </ul>
+              </div>
+
+              <div v-if="criteria.thresholds?.length" class="criteria-section">
+                <div class="section-label">识别阈值</div>
+                <el-table :data="criteria.thresholds" stripe border class="threshold-table">
+                  <el-table-column prop="indicator" label="指标" min-width="240" />
+                  <el-table-column prop="operator" label="运算符" width="90" align="center" />
+                  <el-table-column prop="value" label="阈值" width="120" align="center" />
+                  <el-table-column prop="unit" label="单位" width="80" align="center" />
+                  <el-table-column label="是否必需" width="100" align="center">
+                    <template #default="{ row }">
+                      <el-tag :type="row.required ? 'danger' : 'info'" size="small" effect="light">
+                        {{ row.required ? '必需' : '可选' }}
+                      </el-tag>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+            <el-empty v-else-if="!detailLoading" description="暂无识别标准数据" />
+          </el-tab-pane>
+
+          <!-- 标签页3：路径优化建议 -->
+          <el-tab-pane label="路径优化建议" name="suggestions">
+            <div v-if="suggestionsData?.suggestions?.length" class="suggestions-list">
+              <div
+                v-for="(s, i) in suggestionsData.suggestions"
+                :key="i"
+                class="suggestion-card"
+              >
+                <div class="suggestion-header">
+                  <span class="suggestion-num">{{ String(i + 1).padStart(2, '0') }}</span>
+                  <h4 class="suggestion-title">{{ s.title }}</h4>
+                </div>
+                <p class="suggestion-detail">{{ s.detail }}</p>
+              </div>
+            </div>
+            <el-empty v-else-if="!detailLoading" description="暂无优化建议" />
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import request from '../api'
 
 const modes = ['全部', '生态康养型', '湿地水域型', '农业品牌型', '农文旅融合型', '城郊消费型']
@@ -85,6 +169,11 @@ const list = ref([])
 const loading = ref(false)
 const dialogVisible = ref(false)
 const current = ref(null)
+const activeTab = ref('detail')
+const suggestionsData = ref(null)
+const detailLoading = ref(false)
+
+const criteria = computed(() => suggestionsData.value?.criteria || null)
 
 async function load() {
   loading.value = true
@@ -103,9 +192,26 @@ function setMode(m) {
   load()
 }
 
+async function loadSuggestions(caseId) {
+  detailLoading.value = true
+  suggestionsData.value = null
+  try {
+    const res = await request.get(`/cases/${caseId}/suggestions`)
+    suggestionsData.value = res
+  } catch (e) {
+    suggestionsData.value = null
+  } finally {
+    detailLoading.value = false
+  }
+}
+
 function onView(c) {
   current.value = c
+  activeTab.value = 'detail'
   dialogVisible.value = true
+  if (c.id) {
+    loadSuggestions(c.id)
+  }
 }
 
 onMounted(load)
@@ -307,11 +413,36 @@ onMounted(load)
   color: var(--gp-forest);
 }
 
+.dialog-content {
+  min-height: 200px;
+}
+
+/* 标签页 */
+.case-tabs :deep(.el-tabs__item) {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  height: 46px;
+}
+
+.case-tabs :deep(.el-tabs__item.is-active) {
+  color: var(--gp-forest);
+}
+
+.case-tabs :deep(.el-tabs__active-bar) {
+  background-color: var(--gp-gold);
+}
+
+.case-tabs :deep(.el-tabs__nav-wrap::after) {
+  background-color: var(--gp-line);
+}
+
 .dialog-meta {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .meta-item {
@@ -331,7 +462,157 @@ onMounted(load)
   padding: 8px 0;
 }
 
+/* 模式识别标准 */
+.criteria-content {
+  padding: 4px 0 8px;
+}
+
+.criteria-section {
+  margin-bottom: 24px;
+}
+
+.criteria-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gp-forest);
+  margin-bottom: 12px;
+  padding-left: 10px;
+  border-left: 3px solid var(--gp-gold);
+  line-height: 1.4;
+}
+
+.criteria-definition {
+  background: var(--gp-paper);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--gp-ink-2);
+  border: 1px solid var(--gp-line);
+}
+
+.char-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.char-tag {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 6px 12px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  white-space: normal;
+  max-width: 100%;
+}
+
+.core-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+.core-list li {
+  position: relative;
+  padding: 8px 8px 8px 20px;
+  font-size: 14px;
+  color: var(--gp-ink-2);
+  line-height: 1.7;
+  background: var(--gp-paper);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gp-line);
+}
+
+.core-list li::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gp-gold);
+}
+
+.threshold-table {
+  width: 100%;
+}
+
+.threshold-table :deep(th.el-table__cell) {
+  background: var(--gp-paper-2) !important;
+  color: var(--gp-forest) !important;
+  font-weight: 600;
+}
+
+/* 路径优化建议 */
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0 8px;
+}
+
+.suggestion-card {
+  background: #fff;
+  border: 1px solid var(--gp-line);
+  border-left: 4px solid var(--gp-gold);
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.suggestion-card:hover {
+  box-shadow: var(--shadow-soft);
+  transform: translateX(2px);
+}
+
+.suggestion-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.suggestion-num {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gp-gold);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.suggestion-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gp-forest);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.suggestion-detail {
+  font-size: 14px;
+  color: var(--gp-ink-2);
+  line-height: 1.9;
+  margin: 0;
+  padding-left: 32px;
+  text-align: justify;
+}
+
 @media (max-width: 768px) {
   .case-grid { grid-template-columns: 1fr; }
+  .core-list { grid-template-columns: 1fr; }
+  .suggestion-detail { padding-left: 0; }
 }
 </style>

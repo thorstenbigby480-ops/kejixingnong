@@ -8,9 +8,14 @@ from app.database import get_db
 from app.models.user import User
 from app.models.assessment import Assessment
 from app.core.indicators import load_template, validate_data, compute_scores
-from app.core.ccd_model import compute_coupling_coordination
+from app.core.ccd_model import compute_coupling_coordination, COORDINATION_LEVELS
 from app.core.obstacle import compute_obstacles
 from app.core.ai_advisor import recognize_mode_and_advise
+from app.core.mode_data import (
+    MODE_CRITERIA, MODE_SUGGESTIONS, AHP_WEIGHTS,
+    CLUSTER_RESULTS, COORDINATION_LEVELS as D_LEVELS,
+    get_mode_criteria, get_mode_suggestions,
+)
 from app.pdf.report import generate_report
 from app.config import settings
 
@@ -101,6 +106,8 @@ async def assess(
         "mode_type": mode_type,
         "mode_reason": mode_reason,
         "advice": advice,
+        "mode_criteria": MODE_CRITERIA.get(mode_type, {}),
+        "structured_suggestions": get_mode_suggestions(mode_type) if mode_type else [],
     }
 
 
@@ -120,6 +127,92 @@ def history(
     total = q.count()
     items = q.offset((page - 1) * size).limit(size).all()
     return {"total": total, "page": page, "size": size, "items": items}
+
+
+@router.get("/mode-criteria")
+def mode_criteria(mode_type: Optional[str] = None):
+    """获取五种模式的量化识别标准（阈值、特征、核心要素）"""
+    return get_mode_criteria(mode_type)
+
+
+@router.get("/mode-suggestions/{mode_type}")
+def mode_suggestions(mode_type: str):
+    """获取指定模式的路径优化建议（5-6条结构化建议）"""
+    suggestions = get_mode_suggestions(mode_type)
+    if not suggestions:
+        raise HTTPException(404, f"未找到模式 '{mode_type}' 的优化建议")
+    return {"mode_type": mode_type, "count": len(suggestions), "suggestions": suggestions}
+
+
+@router.get("/ahp-weights")
+def ahp_weights():
+    """获取 AHP 层次分析法组合权重数据"""
+    return AHP_WEIGHTS
+
+
+@router.get("/cluster-results")
+def cluster_results():
+    """获取层次聚类分析结果（含PC1/PC2主成分坐标，用于散点图）"""
+    return {"count": len(CLUSTER_RESULTS), "items": CLUSTER_RESULTS}
+
+
+@router.get("/coordination-levels")
+def coordination_levels():
+    """获取耦合协调度等级划分标准（10级）"""
+    return {"levels": D_LEVELS}
+
+
+@router.get("/coupling-calculate")
+def coupling_calculate(u1: float, u2: float, alpha: float = 0.5, beta: float = 0.5):
+    """独立耦合协调度计算工具：输入两个系统得分，返回耦合度C、协调度D、协调等级"""
+    coupling, d_value, level = compute_coupling_coordination(u1, u2, alpha, beta)
+    # 找到对应的等级颜色
+    level_color = "#666"
+    for lv in D_LEVELS:
+        range_parts = lv["range"].split("-")
+        lo, hi = float(range_parts[0]), float(range_parts[1])
+        if lo <= d_value < hi:
+            level_color = lv["color"]
+            break
+    return {
+        "u1": u1,
+        "u2": u2,
+        "coupling_c": coupling,
+        "coordination_t": round(alpha * (u1 / 100 if u1 > 1 else u1) + beta * (u2 / 100 if u2 > 1 else u2), 4),
+        "coordination_d": d_value,
+        "level": level,
+        "level_color": level_color,
+    }
+
+
+@router.post("/obstacle-diagnose")
+def obstacle_diagnose(data: str = Form(...)):
+    """独立障碍因子诊断工具：输入指标JSON，返回各指标障碍度排名"""
+    try:
+        raw = json.loads(data)
+    except Exception:
+        raise HTTPException(400, "数据格式错误，应为 JSON 字符串")
+    validated = validate_data(raw)
+    eco_score, eco_dim_scores = compute_scores(validated, "eco")
+    rural_score, rural_dim_scores = compute_scores(validated, "rural")
+    obstacles = compute_obstacles(validated, eco_dim_scores, rural_dim_scores, top_n=15)
+    # 添加指标中文名称
+    from app.core.indicators import ECO_INDICATORS, RURAL_INDICATORS
+    all_indicators = {**ECO_INDICATORS, **RURAL_INDICATORS}
+    result = []
+    for k, v in obstacles.items():
+        meta = all_indicators.get(k, {})
+        result.append({
+            "key": k,
+            "name": meta.get("name", k),
+            "obstacle_degree": v,
+            "weight": meta.get("weight", 0),
+        })
+    return {
+        "eco_score": eco_score,
+        "rural_score": rural_score,
+        "obstacles": result,
+    }
 
 
 @router.get("/{assessment_id}")

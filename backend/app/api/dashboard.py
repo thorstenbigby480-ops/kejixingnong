@@ -1,6 +1,7 @@
 """数据大屏 —— 10 区县 2020-2024 多维对比数据"""
 from fastapi import APIRouter
 from typing import Dict, List, Any
+from app.core.mode_data import AHP_WEIGHTS, CLUSTER_RESULTS
 
 router = APIRouter()
 
@@ -198,3 +199,15 @@ def overview(year: int = 2024):
                 "gdp": yd.get("gdp", 0),
             })
     return {"year": year, "items": items}
+
+
+@router.get("/weights")
+def weights():
+    """获取 AHP 层次分析法组合权重数据（用于权重可视化）"""
+    return AHP_WEIGHTS
+
+
+@router.get("/cluster")
+def cluster():
+    """获取层次聚类分析结果（含PC1/PC2主成分坐标，用于散点图）"""
+    return {"count": len(CLUSTER_RESULTS), "items": CLUSTER_RESULTS}
