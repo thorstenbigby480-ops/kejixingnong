@@ -127,6 +127,13 @@ def seed_data():
             {"name": "高淳雨花茶", "category": "茶叶", "origin": "江苏南京高淳", "price": 368.0, "stock": 100, "image_url": "/images/高淳雨花茶.jpg", "eco_cert": "地理标志产品", "description": "高淳雨花茶，条索紧细翠绿，清香高雅，100g礼盒装。"},
             {"name": "黟县香榧", "category": "特产", "origin": "安徽黄山黟县", "price": 158.0, "stock": 120, "image_url": "/images/黟县香榧.jpg", "eco_cert": "地理标志产品", "description": "黟县香榧，香脆可口营养丰富，250g礼盒装。"},
         ]
+        # 清理不在当前种子列表中的旧商品，确保商城只保留这 10 个商品
+        seed_product_names = {p["name"] for p in products}
+        old_products = db.query(Product).filter(~Product.name.in_(seed_product_names)).all()
+        for op in old_products:
+            db.delete(op)
+        db.commit()
+
         upserted_products = 0
         for p in products:
             existing = db.query(Product).filter(Product.name == p["name"]).first()
@@ -138,7 +145,7 @@ def seed_data():
                 db.add(Product(**data))
                 upserted_products += 1
         db.commit()
-        print(f"[seed] ✓ 同步{len(products)}个商品（新增{upserted_products}个）")
+        print(f"[seed] ✓ 同步{len(products)}个商品（新增{upserted_products}个，清理{len(old_products)}个旧商品）")
 
         print(f"[seed] 数据统计: 政策{db.query(Policy).count()}条, 案例{db.query(Case).count()}个, 商品{db.query(Product).count()}个, 用户{db.query(User).count()}个")
     except Exception as e:
