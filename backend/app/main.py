@@ -110,19 +110,19 @@ def seed_data():
         else:
             print("[seed] - 案例已存在，跳过")
 
-        # 4. 商品数据（10个）
+        # 4. 商品数据（10个，使用本地图片 /images/xxx.jpg）
         if db.query(Product).count() == 0:
             products = [
-                {"name": "溧水蓝莓礼盒", "category": "果蔬", "origin": "江苏南京溧水", "price": 128.0, "stock": 200, "image_url": "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80", "eco_cert": "有机产品认证", "description": "溧水白马镇蓝莓，果大汁甜富含花青素，500g礼盒装。"},
-                {"name": "石湫大米", "category": "粮油", "origin": "江苏南京溧水石湫", "price": 68.0, "stock": 500, "image_url": "https://images.unsplash.com/photo-1586201375761-83865074da31?w=800&q=80", "eco_cert": "绿色食品认证", "description": "石湫优质稻花香米，软糯香甜，5kg真空包装。"},
-                {"name": "阳澄湖大闸蟹礼券", "category": "水产", "origin": "江苏苏州昆山", "price": 588.0, "stock": 100, "image_url": "https://images.unsplash.com/photo-1518977676601-b53b0c12c0c0?w=800&q=80", "eco_cert": "地理标志产品", "description": "阳澄湖核心产区大闸蟹，公4.5两母3.5两，8只装礼券。"},
-                {"name": "丽水香菇干货", "category": "食用菌", "origin": "浙江丽水庆元", "price": 58.0, "stock": 300, "image_url": "https://images.unsplash.com/photo-1544200179-ca6e80c8d2de?w=800&q=80", "eco_cert": "有机产品认证", "description": "庆元香菇，肉厚味鲜，250g装。"},
-                {"name": "武夷岩茶大红袍", "category": "茶叶", "origin": "福建南平武夷山", "price": 368.0, "stock": 80, "image_url": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80", "eco_cert": "地理标志产品", "description": "武夷山大红袍，岩韵悠长，100g礼盒装。"},
-                {"name": "安吉白茶", "category": "茶叶", "origin": "浙江湖州安吉", "price": 458.0, "stock": 60, "image_url": "https://images.unsplash.com/photo-1564890369478-c89ca6d9c4a6?w=800&q=80", "eco_cert": "有机产品认证", "description": "安吉高山明前采摘，清香甘醇，50g装。"},
-                {"name": "战旗村手工豆瓣", "category": "加工品", "origin": "四川成都郫都战旗村", "price": 38.0, "stock": 500, "image_url": "https://images.unsplash.com/photo-1607301405964-d50e65c8c3e5?w=800&q=80", "eco_cert": "地理标志产品", "description": "战旗村百年老坊手工酿造，500g装。"},
-                {"name": "淳安千岛湖有机鱼头", "category": "畜禽", "origin": "浙江杭州淳安千岛湖", "price": 128.0, "stock": 150, "image_url": "https://images.unsplash.com/photo-1535140728325-a4d3707eee95?w=800&q=80", "eco_cert": "有机产品认证", "description": "千岛湖野生放养鳙鱼鱼头，3斤装。"},
-                {"name": "巴城阳光玫瑰葡萄", "category": "果蔬", "origin": "江苏苏州昆山巴城", "price": 98.0, "stock": 200, "image_url": "https://images.unsplash.com/photo-1599477173151-9f4b9c8c8e1d?w=800&q=80", "eco_cert": "绿色食品认证", "description": "巴城阳光玫瑰葡萄，玫瑰香气甜度20+，2斤装。"},
-                {"name": "肥西老母鸡礼盒", "category": "畜禽", "origin": "安徽合肥肥西", "price": 188.0, "stock": 100, "image_url": "https://images.unsplash.com/photo-1605195999683-88f3e3c9c28a?w=800&q=80", "eco_cert": "无公害农产品", "description": "肥西散养300天老母鸡，2只装礼盒。"},
+                {"name": "兴化大闸蟹", "category": "水产", "origin": "江苏泰州兴化", "price": 588.0, "stock": 100, "image_url": "/images/兴化大闸蟹.jpg", "eco_cert": "地理标志产品", "description": "兴化垛田大闸蟹，青壳白肚金爪黄毛，公4.5两母3.5两，8只装礼盒。"},
+                {"name": "吴中东山枇杷", "category": "果蔬", "origin": "江苏苏州吴中", "price": 128.0, "stock": 200, "image_url": "/images/吴中东山枇杷.jpg", "eco_cert": "地理标志产品", "description": "东山白玉枇杷，果肉细腻多汁，甜度18+，2斤装礼盒。"},
+                {"name": "大丰恒北早酥梨", "category": "果蔬", "origin": "江苏盐城大丰", "price": 68.0, "stock": 300, "image_url": "/images/大丰恒北早酥梨.jpg", "eco_cert": "绿色食品认证", "description": "恒北村早酥梨，皮薄肉脆汁多，5斤装。"},
+                {"name": "安吉白茶", "category": "茶叶", "origin": "浙江湖州安吉", "price": 458.0, "stock": 60, "image_url": "/images/安吉白茶.jpg", "eco_cert": "地理标志产品", "description": "安吉高山明前采摘，清香甘醇，50g礼盒装。"},
+                {"name": "淳安辣酱", "category": "加工品", "origin": "浙江杭州淳安", "price": 38.0, "stock": 500, "image_url": "/images/淳安辣酱.jpg", "eco_cert": "无公害农产品", "description": "千岛湖农家手工辣酱，鲜辣醇香，250g装。"},
+                {"name": "溧阳天目湖白茶", "category": "茶叶", "origin": "江苏常州溧阳", "price": 528.0, "stock": 80, "image_url": "/images/溧阳天目湖白茶.png", "eco_cert": "地理标志产品", "description": "天目湖白茶，氨基酸含量高，鲜爽回甘，50g礼盒装。"},
+                {"name": "盱眙龙虾", "category": "水产", "origin": "江苏淮安盱眙", "price": 168.0, "stock": 150, "image_url": "/images/盱眙龙虾.jpg", "eco_cert": "地理标志产品", "description": "盱眙十三香小龙虾，活体现发，3斤装（约30只）。"},
+                {"name": "蒲江县猕猴桃", "category": "果蔬", "origin": "四川成都蒲江", "price": 88.0, "stock": 200, "image_url": "/images/蒲江县猕猴桃.jpg", "eco_cert": "有机产品认证", "description": "蒲江红心猕猴桃，甜度18+，10枚装礼盒。"},
+                {"name": "高淳雨花茶", "category": "茶叶", "origin": "江苏南京高淳", "price": 368.0, "stock": 100, "image_url": "/images/高淳雨花茶.jpg", "eco_cert": "地理标志产品", "description": "高淳雨花茶，条索紧细翠绿，清香高雅，100g礼盒装。"},
+                {"name": "黟县香榧", "category": "特产", "origin": "安徽黄山黟县", "price": 158.0, "stock": 120, "image_url": "/images/黟县香榧.jpg", "eco_cert": "地理标志产品", "description": "黟县香榧，香脆可口营养丰富，250g礼盒装。"},
             ]
             for p in products:
                 p["merchant_id"] = merchant.id

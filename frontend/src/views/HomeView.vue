@@ -18,7 +18,7 @@
         </h1>
 
         <p class="hero-desc gp-anim-fade-up" style="animation-delay: 0.4s">
-          基于「党建红 · 产业金 · 生态绿」三色融合理论，<br />
+          基于 AHP 层次分析 · 熵权法 · 耦合协调度 · 障碍度模型，<br />
           一站式完成 <span class="hl">政策检索 · 数据评估 · AI 模式识别 · 路径优化</span>
         </p>
 
@@ -58,63 +58,43 @@
       <!-- 印章 -->
       <div class="hero-seal">
         <div class="seal-inner">
-          <span>三色</span>
-          <span>绘三农</span>
+          <span>绿脉</span>
+          <span>兴农</span>
         </div>
       </div>
     </section>
 
-    <!-- ============ 三色融合 ============ -->
+    <!-- ============ 核心方法论 ============ -->
     <section class="page-wrap">
       <div class="gp-anim-fade-up">
-        <div class="section-eyebrow">三色融合理论 · TRI-COLOR THEORY</div>
-        <h2 class="section-title">党建为核 · 产业为体 · 生态为基</h2>
+        <div class="section-eyebrow">核心方法论 · METHODOLOGY</div>
+        <h2 class="section-title">四模型驱动 · AI 智能识别</h2>
         <p class="section-subtitle">
-          源自南京师范大学"三色绘三农"乡村振兴实践团队的三色融合发展模式，
-          以党建红引领方向，以产业金创造价值，以生态绿保障可持续，构建乡村振兴的系统化路径。
+          融合 AHP 层次分析、熵权法、耦合协调度、障碍度四大模型，
+          结合 DeepSeek AI 大模型，自动识别五种生态产品价值实现模式并输出差异化路径优化建议。
         </p>
       </div>
 
-      <div class="tri-color-grid">
-        <div class="tri-card red gp-anim-fade-up" style="animation-delay: 0.1s">
-          <div class="tri-mark">红</div>
-          <div class="tri-meta">
-            <span class="gp-chip gp-chip-red">党建 · 核心</span>
-          </div>
-          <h3>引领方向</h3>
-          <p>
-            以党建统领整合资源、引导产业、组织生态修复，为生态产品价值实现提供组织保障。
-            通过农村土地"三权分置"改革、村集体经济壮大、新型农业经营主体培育，
-            党建成为乡村振兴的"红色引擎"。
-          </p>
-          <div class="tri-num">01</div>
+      <div class="method-grid">
+        <div class="method-card gp-anim-fade-up" style="animation-delay: 0.1s">
+          <div class="method-num">01</div>
+          <h3>AHP 层次分析</h3>
+          <p>构建生态产品价值实现（11项指标）与乡村振兴（15项指标）两级指标体系，通过专家判断矩阵计算组合权重。</p>
         </div>
-
-        <div class="tri-card gold gp-anim-fade-up" style="animation-delay: 0.2s">
-          <div class="tri-mark">金</div>
-          <div class="tri-meta">
-            <span class="gp-chip gp-chip-gold">产业 · 载体</span>
-          </div>
-          <h3>创造价值</h3>
-          <p>
-            发展特色产业、延长产业链、提高附加值，为党建提供经济基础，为生态保护提供资金支持。
-            通过农产品品牌化、农文旅融合、电商助农，让"绿水青山"转化为"金山银山"。
-          </p>
-          <div class="tri-num">02</div>
+        <div class="method-card gp-anim-fade-up" style="animation-delay: 0.2s">
+          <div class="method-num">02</div>
+          <h3>熵权法</h3>
+          <p>基于10个区县5年面板数据的信息熵，客观赋权计算生态产品价值实现综合指数与乡村振兴综合指数。</p>
         </div>
-
-        <div class="tri-card green gp-anim-fade-up" style="animation-delay: 0.3s">
-          <div class="tri-mark">绿</div>
-          <div class="tri-meta">
-            <span class="gp-chip gp-chip-forest">生态 · 支撑</span>
-          </div>
-          <h3>保障可持续</h3>
-          <p>
-            守住生态红线、强化生态文明，指明产业发展的可持续方向。
-            通过生态产品价值核算（GEP）、生态补偿、碳汇交易等机制，
-            让保护生态者不吃亏、有收益。
-          </p>
-          <div class="tri-num">03</div>
+        <div class="method-card gp-anim-fade-up" style="animation-delay: 0.3s">
+          <div class="method-num">03</div>
+          <h3>耦合协调度模型</h3>
+          <p>测算生态产品价值实现与乡村振兴两大系统的耦合协调度 D∈[0,1]，划分10个等级判定协调发展水平。</p>
+        </div>
+        <div class="method-card gp-anim-fade-up" style="animation-delay: 0.4s">
+          <div class="method-num">04</div>
+          <h3>障碍度模型</h3>
+          <p>识别制约生态产品价值实现与乡村振兴协同发展的关键障碍因子，定位改进优先方向。</p>
         </div>
       </div>
 
@@ -163,8 +143,8 @@
           <div class="section-eyebrow">五种发展模式 · FIVE PARADIGMS</div>
           <h2 class="section-title">因地制宜，因势利导</h2>
           <p class="section-subtitle">
-            AI 智能分析中心基于地区生态、经济、社会指标，自动识别五种生态产品价值实现模式，
-            并输出差异化路径优化建议。
+            基于层次聚类分析，将10个典型区县划分为五种生态产品价值实现模式。
+            AI 智能分析中心根据地区生态、经济、社会指标自动识别所属模式，并输出差异化路径优化建议。
           </p>
         </div>
 
@@ -179,7 +159,22 @@
             <div class="mode-name">{{ m.name }}</div>
             <div class="mode-tag">{{ m.tag }}</div>
             <p class="mode-desc">{{ m.desc }}</p>
+            <div class="mode-criteria">
+              <span class="mode-criteria-label">识别阈值：</span>
+              <span>{{ m.criteria }}</span>
+            </div>
+            <div class="mode-path">
+              <span class="gp-chip gp-chip-gold">路径优化</span>
+              <span class="mode-path-text">{{ m.path }}</span>
+            </div>
           </div>
+        </div>
+
+        <div class="modes-cta gp-anim-fade-up">
+          <button class="gp-btn-primary gp-btn-gold" @click="$router.push('/analysis')">
+            <el-icon><DataAnalysis /></el-icon>
+            立即体验 AI 模式识别
+          </button>
         </div>
       </div>
     </section>
@@ -217,11 +212,41 @@ const features = [
 ]
 
 const modes = [
-  { name: '生态康养型', tag: '森林 / 温泉 / 气候', desc: '依托森林、温泉、气候等生态资源，发展康养度假、疗养保健业态。' },
-  { name: '湿地水域型', tag: '湿地 / 水域 / 滨海', desc: '依托湿地、水域生态系统，发展生态旅游、碳汇交易、生态补偿。' },
-  { name: '农业品牌型', tag: '区域公用品牌', desc: '依托特色农产品区域公用品牌，延伸产业链，提升附加值。' },
-  { name: '农文旅融合型', tag: '三产融合', desc: '农业、文化、旅游深度融合，发展研学、体验、文创多元业态。' },
-  { name: '城郊消费型', tag: '近郊 / 城市圈', desc: '依托城郊区位，面向城市居民消费需求，发展体验式农业与休闲。' },
+  {
+    name: '生态康养型',
+    tag: '森林 / 温泉 / 气候',
+    desc: '依托森林、温泉、气候等生态资源，发展康养度假、疗养保健业态。',
+    criteria: '森林覆盖率≥65%，城镇化率≤55%，空气优良率≥80%',
+    path: '建设森林康养基地、开发气候疗养产品、打造康养小镇品牌',
+  },
+  {
+    name: '湿地水域型',
+    tag: '湿地 / 水域 / 滨海',
+    desc: '依托湿地、水域生态系统，发展生态旅游、碳汇交易、生态补偿。',
+    criteria: '水质达标率≥95%，重要生态保护区面积占比突出',
+    path: '建设湿地公园、发展保水渔业、探索水权交易与碳汇交易',
+  },
+  {
+    name: '农业品牌型',
+    tag: '区域公用品牌',
+    desc: '依托特色农产品区域公用品牌，延伸产业链，提升附加值。',
+    criteria: '粮食播种面积≥10万公顷，农产品产出≥90万吨',
+    path: '打造区域公用品牌、建设三品一标体系、延伸精深加工产业链',
+  },
+  {
+    name: '农文旅融合型',
+    tag: '三产融合',
+    desc: '农业、文化、旅游深度融合，发展研学、体验、文创多元业态。',
+    criteria: '森林覆盖率≥15%，空气优良率≥80%，文化资源丰富',
+    path: '开发研学线路、建设文创工坊、举办乡村节庆、培育特色民宿',
+  },
+  {
+    name: '城郊消费型',
+    tag: '近郊 / 城市圈',
+    desc: '依托城郊区位，面向城市居民消费需求，发展体验式农业与休闲。',
+    criteria: '城镇化率≥70%，GDP≥1000亿元，农村人均收入≥4万元',
+    path: '建设都市农园、发展采摘体验、打造城郊休闲综合体、培育周末经济',
+  },
 ]
 
 const flowSteps = [
@@ -422,77 +447,70 @@ const flowSteps = [
   line-height: 1.4;
 }
 
-/* ============ 三色融合 ============ */
-.tri-color-grid {
+/* ============ 核心方法论 ============ */
+.method-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   margin-top: 32px;
 }
 
-.tri-card {
+.method-card {
   position: relative;
-  padding: 40px 32px;
+  padding: 32px 24px;
   border-radius: var(--radius-md);
-  overflow: hidden;
   background: #fff;
   border: 1px solid var(--gp-line);
   box-shadow: var(--shadow-soft);
   transition: all 0.4s ease;
+  overflow: hidden;
 }
 
-.tri-card:hover {
+.method-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gp-forest) 0%, var(--gp-gold) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.method-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
+  border-color: var(--gp-gold);
 }
 
-.tri-card.red { background: linear-gradient(135deg, #fff 0%, rgba(139, 30, 63, 0.04) 100%); }
-.tri-card.gold { background: linear-gradient(135deg, #fff 0%, rgba(199, 154, 0, 0.06) 100%); }
-.tri-card.green { background: linear-gradient(135deg, #fff 0%, rgba(13, 59, 46, 0.04) 100%); }
+.method-card:hover::before { transform: scaleX(1); }
 
-.tri-mark {
-  position: absolute;
-  top: -20px;
-  right: 16px;
-  font-family: var(--font-serif);
-  font-size: 160px;
-  font-weight: 900;
-  line-height: 1;
-  opacity: 0.08;
-  user-select: none;
-}
-
-.tri-card.red .tri-mark { color: var(--gp-red); }
-.tri-card.gold .tri-mark { color: var(--gp-gold); }
-.tri-card.green .tri-mark { color: var(--gp-forest); }
-
-.tri-meta { margin-bottom: 16px; }
-
-.tri-card h3 {
-  font-size: 28px;
-  margin: 0 0 16px;
-  font-weight: 700;
-}
-
-.tri-card.red h3 { color: var(--gp-red); }
-.tri-card.gold h3 { color: var(--gp-clay); }
-.tri-card.green h3 { color: var(--gp-forest); }
-
-.tri-card p {
-  color: var(--gp-ink-2);
-  line-height: 1.9;
-  font-size: 14px;
-  margin: 0;
-}
-
-.tri-num {
-  position: absolute;
-  bottom: 16px;
-  right: 24px;
+.method-num {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--gp-ink-3);
-  letter-spacing: 0.2em;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gp-gold);
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.method-card h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gp-forest);
+  margin: 0 0 12px;
+}
+
+.method-card p {
+  color: var(--gp-ink-2);
+  line-height: 1.8;
+  font-size: 13px;
+  margin: 0;
 }
 
 /* ============ 功能卡片 ============ */
@@ -626,7 +644,45 @@ const flowSteps = [
   font-size: 12px;
   line-height: 1.7;
   color: var(--gp-ink-2);
-  margin: 0;
+  margin: 0 0 14px;
+}
+
+.mode-criteria {
+  padding: 10px 12px;
+  background: rgba(13, 59, 46, 0.04);
+  border-left: 2px solid var(--gp-forest-3);
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--gp-ink-2);
+  margin-bottom: 12px;
+}
+
+.mode-criteria-label {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--gp-forest);
+  letter-spacing: 0.05em;
+}
+
+.mode-path {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--gp-line);
+}
+
+.mode-path-text {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--gp-ink-2);
+  flex: 1;
+}
+
+.modes-cta {
+  text-align: center;
+  margin-top: 40px;
 }
 
 /* ============ 流程 ============ */
@@ -695,7 +751,7 @@ const flowSteps = [
 
 /* ============ 响应式 ============ */
 @media (max-width: 1024px) {
-  .tri-color-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .modes-grid { grid-template-columns: repeat(2, 1fr); }
   .flow-grid { grid-template-columns: repeat(2, 1fr); }

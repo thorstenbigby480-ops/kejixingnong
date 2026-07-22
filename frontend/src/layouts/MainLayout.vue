@@ -57,15 +57,16 @@
           <p class="footer-tag">让"绿水青山"看得见、算得清、走得通</p>
         </div>
         <div class="footer-col">
-          <div class="footer-title">三色融合理论</div>
-          <p class="footer-line"><span class="dot red"></span>党建红 · 核心 · 引领方向</p>
-          <p class="footer-line"><span class="dot gold"></span>产业金 · 载体 · 创造价值</p>
-          <p class="footer-line"><span class="dot green"></span>生态绿 · 支撑 · 保障可持续</p>
+          <div class="footer-title">核心方法论</div>
+          <p class="footer-line">AHP 层次分析 · 组合权重</p>
+          <p class="footer-line">熵权法 · 客观赋权</p>
+          <p class="footer-line">耦合协调度模型 · D 值</p>
+          <p class="footer-line">障碍度模型 · 因子识别</p>
         </div>
         <div class="footer-col">
           <div class="footer-title">参赛信息</div>
           <p class="footer-line">中国研究生乡村振兴科技强农+创新大赛</p>
-          <p class="footer-line">南京师范大学 · 三色绘三农实践团队</p>
+          <p class="footer-line">南京师范大学 · 绿脉兴农团队</p>
           <p class="footer-line">作品编号：2024S01</p>
         </div>
         <div class="footer-col">
@@ -285,13 +286,7 @@ const user = computed(() => {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg,
-    var(--gp-red) 0%,
-    var(--gp-red) 33%,
-    var(--gp-gold) 33%,
-    var(--gp-gold) 66%,
-    var(--gp-forest-3) 66%,
-    var(--gp-forest-3) 100%);
+  background: linear-gradient(90deg, var(--gp-forest) 0%, var(--gp-gold) 100%);
 }
 
 .footer-inner {
@@ -354,9 +349,6 @@ const user = computed(() => {
   height: 8px;
   border-radius: 50%;
 }
-.dot.red { background: var(--gp-red); }
-.dot.gold { background: var(--gp-gold); }
-.dot.green { background: var(--gp-forest-3); }
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
