@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绿脉兴农平台 · 技术白皮书</title>
+<style>
+  /* ============================================================
+     绿脉兴农平台技术白皮书
+     样式规范：参照 GB/T 7713.1 学位论文格式 + 华为产品白皮书风格
+     纸张：A4 (210mm × 297mm)
+     页边距：上下 2.54cm，左右 3.17cm（Word 默认）
+     ============================================================ */
+
+  @page {
+    size: A4;
+    margin: 25.4mm 31.7mm 25.4mm 31.7mm;
+    @top-center {
+      content: "绿脉兴农平台技术白皮书";
+      font-family: "Times New Roman", "宋体", serif;
+      font-size: 9pt;
+      color: #666;
+      border-bottom: 0.5pt solid #ccc;
+      padding-bottom: 4pt;
+      width: 100%;
+    }
+    @bottom-center {
+      content: counter(page);
+      font-family: "Times New Roman", serif;
+      font-size: 10pt;
+      color: #333;
+    }
+  }
+
+  /* 首页不显示页眉 */
+  @page :first {
+    @top-center { content: ""; border-bottom: none; }
+    @bottom-center { content: ""; }
+  }
+
+  /* 目录页用罗马数字 */
+  @page toc {
+    @bottom-center {
+      content: counter(page, lower-roman);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    font-family: "Times New Roman", "宋体", "SimSun", serif;
+    font-size: 12pt;
+    line-height: 1.625;
+    color: #000;
+    background: #f0f0f0;
+  }
+
+  body {
+    background: #f0f0f0;
+    padding: 0;
+  }
+
+  /* === 纸张页 === */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    background: #fff;
+    padding: 25.4mm 31.7mm;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  .page:last-child { page-break-after: auto; }
+
+  /* === 封面页 === */
+  .cover-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(297mm - 50.8mm);
+    padding: 0;
+  }
+
+  .cover-top {
+    border-bottom: 2pt solid #0d3b2e;
+    padding-bottom: 8mm;
+    margin-bottom: 20mm;
+  }
+
+  .cover-classification {
+    font-family: "Times New Roman", serif;
+    font-size: 10pt;
+    color: #8b1e3f;
+    letter-spacing: 0.2em;
+    margin-bottom: 4mm;
+    font-weight: 600;
+  }
+
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 6mm;
+  }
+
+  .cover-logo-mark {
+    width: 56px;
+    height: 56px;
+    background: #0d3b2e;
+    color: #c79a00;
+    font-family: "STSong", serif;
+    font-size: 26px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(13, 59, 46, 0.25);
+  }
+  .cover-logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid #c79a00;
+    border-radius: 2px;
+  }
+
+  .cover-logo-text {
+    font-family: "STSong", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0d3b2e;
+    letter-spacing: 0.15em;
+  }
+  .cover-logo-sub {
+    font-family: "Times New Roman", monospace;
+    font-size: 9pt;
+    color: #8a8a8a;
+    letter-spacing: 0.2em;
+    margin-top: 2px;
+  }
+
+  .cover-title-block {
+    margin-top: 30mm;
+    text-align: center;
+  }
+
+  .cover-eyebrow {
+    font-family: "Times New Roman", monospace;
+    font-size: 11pt;
+    color: #c79a00;
+    letter-spacing: 0.4em;
+    margin-bottom: 10mm;
+    text-transform: uppercase;
+  }
+
+  .cover-title {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 36pt;
+    font-weight: 900;
+    color: #0d3b2e;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    margin-bottom: 6mm;
+  }
+
+  .cover-subtitle {
+    font-family: "STSong", serif;
+    font-size: 16pt;
+    color: #2d6a4f;
+    letter-spacing: 0.15em;
+    margin-bottom: 30mm;
+  }
+
+  .cover-info {
+    margin-top: auto;
+    padding: 10mm 0;
+    border-top: 0.5pt solid #c79a00;
+  }
+
+  .cover-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6mm 20mm;
+    font-size: 11pt;
+  }
+
+  .cover-info-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .cover-info-label {
+    font-family: "STSong", serif;
+    font-weight: 600;
+    color: #0d3b2e;
+    min-width: 70px;
+  }
+
+  .cover-info-value {
+    color: #333;
+    font-family: "Times New Roman", "宋体", serif;
+    flex: 1;
+    border-bottom: 0.5pt dotted #8a8a8a;
+    padding-bottom: 2px;
+  }
+
+  /* === 摘要页 === */
+  .abstract-page h1 {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 18pt;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 18pt;
+    letter-spacing: 0.2em;
+  }
+
+  .abstract-content {
+    text-indent: 2em;
+    text-align: justify;
+    line-height: 1.875;
+    margin-bottom: 14pt;
+  }
+
+  .keywords {
+    margin-top: 20pt;
+  }
+  .keywords-label {
+    font-family: "STSong", serif;
+    font-weight: 700;
+  }
+  .keywords-content {
+    font-family: "Times New Roman", "宋体", serif;
+  }
+
+  /* === 目录 === */
+  .toc-page h1 {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 18pt;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 24pt;
+    letter-spacing: 0.2em;
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 6pt;
+    font-size: 11pt;
+  }
+
+  .toc-item.l2 { padding-left: 24pt; font-size: 10.5pt; }
+  .toc-item.l3 { padding-left: 48pt; font-size: 10pt; color: #444; }
+
+  .toc-title { font-family: "STSong", serif; }
+  .toc-dots {
+    flex: 1;
+    border-bottom: 0.5pt dotted #8a8a8a;
+    margin: 0 8px;
+    position: relative;
+    top: -3px;
+  }
+  .toc-page-num {
+    font-family: "Times New Roman", serif;
+    color: #333;
+  }
+
+  /* === 章节标题 === */
+  h1.chapter-title {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 16pt;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 20pt 0;
+    padding-bottom: 8pt;
+    border-bottom: 1.5pt solid #0d3b2e;
+    letter-spacing: 0.1em;
+  }
+
+  h2.section-title {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 14pt;
+    font-weight: 700;
+    color: #0d3b2e;
+    margin: 18pt 0 10pt 0;
+    padding-left: 6pt;
+    border-left: 4pt solid #c79a00;
+  }
+
+  h3.subsection-title {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 12pt;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin: 12pt 0 6pt 0;
+  }
+
+  /* 章节自动编号 */
+  h2.section-title {
+    counter-increment: section;
+    counter-reset: subsection;
+  }
+  h2.section-title::before {
+    content: counter(section) " ";
+    font-family: "Times New Roman", serif;
+    color: #c79a00;
+    margin-right: 4px;
+  }
+
+  h3.subsection-title {
+    counter-increment: subsection;
+  }
+  h3.subsection-title::before {
+    content: counter(section) "." counter(subsection) " ";
+    font-family: "Times New Roman", serif;
+    color: #2d6a4f;
+  }
+
+  body { counter-reset: section; }
+
+  /* === 正文段落 === */
+  p {
+    text-indent: 2em;
+    text-align: justify;
+    line-height: 1.875;
+    margin-bottom: 8pt;
+    font-size: 12pt;
+  }
+
+  p.no-indent { text-indent: 0; }
+
+  /* === 图表 === */
+  figure {
+    margin: 16pt 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  figure img, figure svg {
+    max-width: 100%;
+    height: auto;
+    border: 0.5pt solid #ccc;
+    padding: 8pt;
+    background: #fff;
+  }
+
+  figcaption {
+    font-family: "STSong", "SimSun", serif;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #000;
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  figcaption::before {
+    content: "图 " counter(figure) " ";
+    font-family: "Times New Roman", serif;
+    color: #0d3b2e;
+  }
+  figure { counter-increment: figure; }
+  body { counter-reset: figure; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12pt 0;
+    font-size: 10.5pt;
+    page-break-inside: avoid;
+  }
+
+  table caption {
+    caption-side: top;
+    font-family: "STSong", serif;
+    font-size: 10.5pt;
+    font-weight: 700;
+    margin-bottom: 6pt;
+    text-align: center;
+  }
+  table caption::before {
+    content: "表 " counter(table) " ";
+    font-family: "Times New Roman", serif;
+    color: #0d3b2e;
+  }
+  table { counter-increment: table; }
+
+  th, td {
+    border: 0.5pt solid #000;
+    padding: 5pt 8pt;
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  th {
+    background: #f0f0f0;
+    font-family: "STSong", serif;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* 三线表样式（学术论文常用） */
+  table.three-line {
+    border-top: 1.5pt solid #000;
+    border-bottom: 1.5pt solid #000;
+  }
+  table.three-line th, table.three-line td {
+    border: none;
+    border-bottom: 0.5pt solid #000;
+  }
+  table.three-line th {
+    background: transparent;
+    border-bottom: 1pt solid #000;
+  }
+  table.three-line tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* === 公式 === */
+  .formula-block {
+    margin: 12pt 0;
+    padding: 10pt 16pt;
+    background: #faf7f0;
+    border-left: 3pt solid #c79a00;
+    font-family: "Times New Roman", "Cambria Math", serif;
+    font-size: 11pt;
+    line-height: 2;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  .formula-block .formula-num {
+    float: right;
+    color: #333;
+    font-family: "Times New Roman", serif;
+  }
+
+  /* === 列表 === */
+  ul, ol {
+    margin: 8pt 0 8pt 2em;
+    padding-left: 1em;
+  }
+  li { margin-bottom: 4pt; line-height: 1.75; }
+
+  /* === 重点框 === */
+  .callout-box {
+    margin: 12pt 0;
+    padding: 12pt 16pt;
+    background: #fffdf6;
+    border: 0.5pt solid #c79a00;
+    border-left: 4pt solid #c79a00;
+    page-break-inside: avoid;
+  }
+  .callout-box-title {
+    font-family: "STSong", serif;
+    font-weight: 700;
+    color: #8a6a00;
+    margin-bottom: 6pt;
+  }
+
+  /* === 代码块 === */
+  pre {
+    margin: 8pt 0;
+    padding: 10pt 12pt;
+    background: #f5f5f5;
+    border: 0.5pt solid #ccc;
+    border-left: 3pt solid #2d6a4f;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    line-height: 1.5;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    background: #f0f0f0;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  /* === 参考文献样式 === */
+  .references-list {
+    list-style: none;
+    counter-reset: ref;
+    padding-left: 0;
+  }
+  .references-list li {
+    counter-increment: ref;
+    padding-left: 28pt;
+    text-indent: -28pt;
+    margin-bottom: 6pt;
+    font-size: 10.5pt;
+    line-height: 1.6;
+  }
+  .references-list li::before {
+    content: "[" counter(ref) "] ";
+    font-family: "Times New Roman", serif;
+    color: #0d3b2e;
+    font-weight: 600;
+  }
+
+  /* === 分页控制 === */
+  .page-break { page-break-before: always; }
+  .avoid-break { page-break-inside: avoid; }
+
+  /* === 屏幕显示优化 === */
+  @media screen {
+    body { background: #525659; padding: 20px 0; }
+    .page {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* === 打印优化 === */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+    }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     封面页
+     ============================================================ -->
+<div class="page">
+  <div class="cover-page">
+    <div>
+      <div class="cover-top">
+        <div class="cover-classification">机密 · 内部使用</div>
+        <div class="cover-logo">
+          <div class="cover-logo-mark">绿</div>
+          <div>
+            <div class="cover-logo-text">绿脉兴农</div>
+            <div class="cover-logo-sub">LVMAI · ECO-VALUE PLATFORM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cover-title-block">
+        <div class="cover-eyebrow">TECHNICAL WHITE PAPER · V1.0</div>
+        <h1 class="cover-title">绿脉兴农平台<br>技术白皮书</h1>
+        <div class="cover-subtitle">生态产品价值实现赋能乡村振兴<br>一体化智能系统</div>
+      </div>
+    </div>
+
+    <div class="cover-info">
+      <div class="cover-info-grid">
+        <div class="cover-info-item">
+          <span class="cover-info-label">文档版本：</span>
+          <span class="cover-info-value">V1.0</span>
+        </div>
+        <div class="cover-info-item">
+          <span class="cover-info-label">发布日期：</span>
+          <span class="cover-info-value">2026 年 07 月</span>
+        </div>
+        <div class="cover-info-item">
+          <span class="cover-info-label">保密等级：</span>
+          <span class="cover-info-value">内部公开</span>
+        </div>
+        <div class="cover-info-item">
+          <span class="cover-info-label">文档状态：</span>
+          <span class="cover-info-value">正式发布</span>
+        </div>
+        <div class="cover-info-item">
+          <span class="cover-info-label">编制单位：</span>
+          <span class="cover-info-value">南京师范大学 · 绿脉兴农团队</span>
+        </div>
+        <div class="cover-info-item">
+          <span class="cover-info-label">适用赛事：</span>
+          <span class="cover-info-value">中国研究生乡村振兴科技强农+创新大赛</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     摘要页
+     ============================================================ -->
+<div class="page">
+  <div class="abstract-page">
+    <h1>摘 要</h1>
+
+    <p class="abstract-content">
+      在"绿水青山就是金山银山"理念与乡村振兴战略双重背景下，如何科学量化生态产品价值实现水平、识别区域发展模式、生成差异化路径建议，成为地方政府与研究机构亟待解决的关键问题。本文介绍了一款名为"绿脉兴农"的一体化智能决策支持平台，该平台融合层次分析法（AHP）、熵权法、耦合协调度模型与障碍度模型四大数学方法，并集成 DeepSeek 大语言模型，构建了从数据采集、模型评估到路径优化的完整闭环。
+    </p>
+
+    <p class="abstract-content">
+      平台以长江三角洲地区 10 个典型区县 2020—2024 年面板数据为样本，构建了包含 11 项生态产品价值实现指标与 15 项乡村振兴指标的二维评估体系，通过层次聚类分析提炼出生态康养型、湿地水域型、农业品牌型、农文旅融合型、城郊消费型五种发展模式，并为每种模式配置量化识别阈值与 27 条结构化路径优化建议。平台采用前后端分离架构，前端基于 Vue 3 与 Element Plus 构建，后端基于 FastAPI 与 SQLAlchemy 实现，通过 RESTful API 提供服务。测试表明，平台可在 3 秒内完成单次综合评估，PDF 报告自动生成，AI 路径建议响应稳定。
+    </p>
+
+    <p class="abstract-content">
+      本文系统阐述了平台的总体架构、核心算法原理、功能模块设计、关键流程实现及部署运维方案，并附完整指标体系与 API 接口规范，为同类研究与产品研发提供参考。
+    </p>
+
+    <div class="keywords">
+      <span class="keywords-label">关键词：</span>
+      <span class="keywords-content">生态产品价值实现；乡村振兴；层次分析法；耦合协调度；障碍度模型；DeepSeek；智能决策支持系统</span>
+    </div>
+
+    <br><br>
+
+    <h1 style="font-family: 'Times New Roman', serif; font-size: 16pt;">Abstract</h1>
+
+    <p class="abstract-content" style="font-family: 'Times New Roman', serif;">
+      Under the background of the "Lucid Waters and Lush Mountains are Invaluable Assets" concept and the Rural Revitalization Strategy, scientifically quantifying the realization level of ecological product value, identifying regional development patterns, and generating differentiated path recommendations have become key issues for local governments and research institutions. This paper introduces an integrated intelligent decision-support platform named "Green-Pulse Agri-Revival" (LVMAI), which integrates four mathematical methods—Analytic Hierarchy Process (AHP), Entropy Weight Method, Coupling Coordination Degree Model, and Obstacle Degree Model—with the DeepSeek Large Language Model to construct a complete closed-loop from data acquisition, model evaluation to path optimization.
+    </p>
+
+    <p class="abstract-content" style="font-family: 'Times New Roman', serif;">
+      Using panel data from 10 typical counties in the Yangtze River Delta region from 2020 to 2024 as samples, the platform constructs a two-dimensional evaluation system comprising 11 ecological product value realization indicators and 15 rural revitalization indicators. Through hierarchical cluster analysis, five development patterns are extracted: Ecological Health, Wetland Water, Agricultural Brand, Agri-Cultural-Tourism Integration, and Suburban Consumption. Each pattern is configured with quantitative identification thresholds and 27 structured path optimization suggestions. The platform adopts a front-end and back-end separation architecture, with the front-end built on Vue 3 and Element Plus, and the back-end implemented with FastAPI and SQLAlchemy. Testing shows that the platform can complete a single comprehensive evaluation within 3 seconds, with automatic PDF report generation and stable AI path recommendation responses.
+    </p>
+
+    <div class="keywords">
+      <span class="keywords-label" style="font-family: 'Times New Roman', serif;">Keywords:</span>
+      <span class="keywords-content" style="font-family: 'Times New Roman', serif;">Ecological Product Value Realization; Rural Revitalization; Analytic Hierarchy Process; Coupling Coordination Degree; Obstacle Degree Model; DeepSeek; Intelligent Decision Support System</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     目录页
+     ============================================================ -->
+<div class="page">
+  <div class="toc-page">
+    <h1>目 录</h1>
+
+    <div class="toc-list">
+      <div class="toc-item">
+        <span class="toc-title">第一章 绪论</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">1</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">1.1 研究背景与意义</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">1</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">1.2 国内外研究现状</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">1</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">1.3 平台建设目标</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">2</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">1.4 文档组织结构</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">2</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第二章 平台总体架构</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">3</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">2.1 设计原则</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">3</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">2.2 总体架构</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">3</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">2.3 技术选型</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">5</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">2.4 数据规模</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">5</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第三章 核心算法原理</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">6</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">3.1 AHP 层次分析法</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">6</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">3.2 耦合协调度模型</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">7</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">3.3 障碍度模型</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">8</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">3.4 DeepSeek AI 智能引擎</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">8</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">3.5 层次聚类分析</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">9</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第四章 功能模块设计</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">10</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.1 首页门户</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">10</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.2 政策中心</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">10</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.3 智能分析中心</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">11</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.4 数据大屏</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">12</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.5 农产品商城</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">13</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.6 案例中心</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">13</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">4.7 用户中心</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">14</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第五章 五种发展模式</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">15</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">5.1 模式提取方法</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">15</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">5.2 模式详细说明</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">15</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">5.3 路径优化建议矩阵</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">17</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第六章 关键流程实现</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">18</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">6.1 智能评估流程</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">18</span>
+      </div>
+      <div class="toc-item l2">
+        <span class="toc-title">6.2 商城交易流程</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">19</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第七章 API 接口规范</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">20</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第八章 部署与运维</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">22</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">第九章 总结与展望</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">23</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">参考文献</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">24</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">附录 A 指标体系完整权重表</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">25</span>
+      </div>
+
+      <div class="toc-item">
+        <span class="toc-title">附录 B 缩略语表</span>
+        <span class="toc-dots"></span>
+        <span class="toc-page-num">26</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     第一章 绪论
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第一章 绪论</h1>
+
+  <h2 class="section-title">研究背景与意义</h2>
+
+  <p>2021 年 4 月，中共中央办公厅、国务院办公厅印发《关于建立健全生态产品价值实现机制的意见》，明确提出"建立生态产品调查监测机制、价值评价机制、经营开发机制、保护补偿机制、实现保障机制"五大核心任务。2022 年中央一号文件进一步强调"探索生态产品价值实现路径"，将生态产品价值实现纳入乡村振兴战略整体布局。</p>
+
+  <p>然而，当前生态产品价值实现仍面临三大挑战：其一，生态产品价值"算不清"，缺乏统一规范的量化评估方法；其二，区域发展模式"看不透"，难以从复杂指标中识别差异化路径；其三，政策建议"落不实"，理论研究成果难以转化为地方政府可操作的决策依据。</p>
+
+  <p>针对上述问题，本团队研发"绿脉兴农"一体化智能决策支持平台，通过融合多源数学模型与 AI 大模型，构建从数据采集、综合评估、模式识别到路径优化的完整闭环，为地方政府、农业合作社、研究学者提供科学决策支持，具有重要的理论意义与实践价值。</p>
+
+  <h2 class="section-title">国内外研究现状</h2>
+
+  <p>国外生态产品价值评估起源于 Costanza 等人（1997）的全球生态系统服务价值评估研究，随后 InVEST 模型、ARIES 模型等工具相继问世，为生态系统服务量化提供了方法基础。然而，这些工具主要面向生态系统服务物理量评估，对价值实现机制与社会经济耦合分析支持不足。</p>
+
+  <p>国内研究起步较晚但发展迅速。欧阳志云团队（2013—2020）提出了生态系统生产总值（GEP）核算框架，已在浙江丽水、深圳等地开展试点；高楠等（2019）构建了耦合协调度模型评估生态与经济协同发展水平；李芳林等（2021）运用障碍度模型识别乡村振兴制约因素。但现有研究多聚焦于单一模型应用，缺乏多模型集成与智能化路径优化能力，难以满足地方政府综合决策需求。</p>
+
+  <p>近年来，大语言模型（LLM）的快速发展为智能决策支持提供了新契机。DeepSeek 等国产开源大模型在中文语境下表现优异，具备处理领域知识、生成结构化建议的能力。本平台创新性地将传统数学模型与大语言模型结合，弥补了现有研究在智能化路径优化方面的不足。</p>
+
+  <h2 class="section-title">平台建设目标</h2>
+
+  <p>绿脉兴农平台旨在构建一个"算得清、看得见、走得通"的一体化智能决策支持系统，具体目标如下：</p>
+
+  <ol>
+    <li><strong>算得清</strong>：基于 AHP 层次分析法与熵权法，构建涵盖 11 项生态产品价值实现指标与 15 项乡村振兴指标的二维评估体系，通过组合权重加权综合评分，实现地区生态与乡村振兴水平的科学量化。</li>
+    <li><strong>看得见</strong>：以 10 个典型区县 5 年面板数据为基础，构建多维可视化数据大屏，支持横向对比、时间演化、模式雷达、耦合散点等多种分析视角，使数据规律直观可见。</li>
+    <li><strong>走得通</strong>：通过层次聚类分析提取 5 种发展模式，结合 DeepSeek AI 引擎生成 27 条差异化路径优化建议，并一键导出 PDF 评估报告，为地方政府决策提供可操作依据。</li>
+  </ol>
+
+  <h2 class="section-title">文档组织结构</h2>
+
+  <p>本文共分九章，组织结构如下：</p>
+
+  <p class="no-indent">第一章 绪论。介绍研究背景、意义、国内外现状及平台建设目标。</p>
+  <p class="no-indent">第二章 平台总体架构。阐述设计原则、四层架构与技术选型。</p>
+  <p class="no-indent">第三章 核心算法原理。详细说明 AHP、耦合协调度、障碍度、AI 引擎与聚类分析五大算法。</p>
+  <p class="no-indent">第四章 功能模块设计。介绍七大功能模块的设计与实现。</p>
+  <p class="no-indent">第五章 五种发展模式。说明模式提取方法、详细特征与路径优化建议矩阵。</p>
+  <p class="no-indent">第六章 关键流程实现。描述智能评估与商城交易两大核心流程。</p>
+  <p class="no-indent">第七章 API 接口规范。列出全部 RESTful 端点。</p>
+  <p class="no-indent">第八章 部署与运维。说明环境配置、启动方式与生产部署方案。</p>
+  <p class="no-indent">第九章 总结与展望。总结平台价值并展望未来工作。</p>
+</div>
+
+<!-- ============================================================
+     第二章 平台总体架构
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第二章 平台总体架构</h1>
+
+  <h2 class="section-title">设计原则</h2>
+
+  <p>平台设计遵循以下五项原则：</p>
+
+  <ol>
+    <li><strong>科学性原则</strong>：所有评估方法基于成熟数学模型，权重通过 AHP 专家打分得出，避免主观随意性。</li>
+    <li><strong>实用性原则</strong>：功能设计紧密对接地方政府实际需求，所有评估结果可直接用于决策汇报。</li>
+    <li><strong>可扩展性原则</strong>：采用模块化架构，新增指标、模式、算法模块不影响现有功能。</li>
+    <li><strong>安全性原则</strong>：基于 JWT 实现无状态身份认证，敏感操作进行权限校验。</li>
+    <li><strong>易用性原则</strong>：界面遵循 Element Plus 设计规范，操作流程符合用户直觉。</li>
+  </ol>
+
+  <h2 class="section-title">总体架构</h2>
+
+  <p>平台采用前后端分离架构，整体分为四层：前端展示层、后端服务层、核心算法层与数据存储层，各层之间通过明确定义的接口进行通信，层间耦合度低，便于独立演进。</p>
+
+  <figure>
+    <svg viewBox="0 0 720 540" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="feGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2d6a4f"/>
+          <stop offset="100%" stop-color="#0d3b2e"/>
+        </linearGradient>
+        <linearGradient id="beGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c79a00"/>
+          <stop offset="100%" stop-color="#8a6a00"/>
+        </linearGradient>
+        <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#52796f"/>
+          <stop offset="100%" stop-color="#355e56"/>
+        </linearGradient>
+        <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8b1e3f"/>
+          <stop offset="100%" stop-color="#5e1429"/>
+        </linearGradient>
+        <marker id="arrowSmall" markerWidth="8" markerHeight="8" refX="6" refY="2" orient="auto">
+          <polygon points="0,0 8,2 0,4" fill="#666"/>
+        </marker>
+      </defs>
+
+      <!-- 前端层 -->
+      <rect x="20" y="20" width="680" height="120" rx="8" fill="url(#feGrad)" opacity="0.1"/>
+      <text x="30" y="40" font-family="serif" font-size="12" font-weight="700" fill="#0d3b2e">前端展示层 · Vue 3 + Element Plus</text>
+      <g font-family="sans-serif" font-size="9" fill="#fff">
+        <rect x="30" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="70" y="80" text-anchor="middle" font-weight="600">首页</text>
+        <text x="70" y="95" text-anchor="middle" font-size="7" opacity="0.9">HomeView</text>
+
+        <rect x="120" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="160" y="80" text-anchor="middle" font-weight="600">政策中心</text>
+        <text x="160" y="95" text-anchor="middle" font-size="7" opacity="0.9">PolicyView</text>
+
+        <rect x="210" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="250" y="78" text-anchor="middle" font-weight="700">智能分析 ⭐</text>
+        <text x="250" y="93" text-anchor="middle" font-size="7" opacity="0.9">AnalysisView</text>
+
+        <rect x="300" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="340" y="80" text-anchor="middle" font-weight="600">数据大屏</text>
+        <text x="340" y="95" text-anchor="middle" font-size="7" opacity="0.9">DashboardView</text>
+
+        <rect x="390" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="430" y="80" text-anchor="middle" font-weight="600">农产品商城</text>
+        <text x="430" y="95" text-anchor="middle" font-size="7" opacity="0.9">MallView</text>
+
+        <rect x="480" y="55" width="80" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="520" y="80" text-anchor="middle" font-weight="600">案例中心</text>
+        <text x="520" y="95" text-anchor="middle" font-size="7" opacity="0.9">CaseView</text>
+
+        <rect x="570" y="55" width="120" height="70" rx="4" fill="url(#feGrad)"/>
+        <text x="630" y="80" text-anchor="middle" font-weight="600">用户中心</text>
+        <text x="630" y="95" text-anchor="middle" font-size="7" opacity="0.9">UserView · JWT 鉴权</text>
+      </g>
+
+      <!-- 后端层 -->
+      <rect x="20" y="170" width="680" height="120" rx="8" fill="url(#beGrad)" opacity="0.1"/>
+      <text x="30" y="190" font-family="serif" font-size="12" font-weight="700" fill="#8a6a00">后端服务层 · FastAPI + SQLAlchemy</text>
+      <g font-family="sans-serif" font-size="9" fill="#fff">
+        <rect x="30" y="205" width="100" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="80" y="225" text-anchor="middle" font-weight="600">Auth API</text>
+        <text x="80" y="240" text-anchor="middle" font-size="7" opacity="0.9">注册/登录</text>
+        <text x="80" y="255" text-anchor="middle" font-size="7" opacity="0.7">JWT Token</text>
+
+        <rect x="140" y="205" width="100" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="190" y="225" text-anchor="middle" font-weight="600">Policy API</text>
+        <text x="190" y="240" text-anchor="middle" font-size="7" opacity="0.9">政策检索</text>
+
+        <rect x="250" y="205" width="100" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="300" y="220" text-anchor="middle" font-weight="700">Analysis API ⭐</text>
+        <text x="300" y="235" text-anchor="middle" font-size="7" opacity="0.9">智能评估</text>
+        <text x="300" y="250" text-anchor="middle" font-size="7" opacity="0.7">10 个端点</text>
+
+        <rect x="360" y="205" width="100" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="410" y="225" text-anchor="middle" font-weight="600">Dashboard API</text>
+        <text x="410" y="240" text-anchor="middle" font-size="7" opacity="0.9">大屏数据</text>
+
+        <rect x="470" y="205" width="100" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="520" y="225" text-anchor="middle" font-weight="600">Mall API</text>
+        <text x="520" y="240" text-anchor="middle" font-size="7" opacity="0.9">商品/订单</text>
+
+        <rect x="580" y="205" width="110" height="70" rx="4" fill="url(#beGrad)"/>
+        <text x="635" y="225" text-anchor="middle" font-weight="600">Case API</text>
+        <text x="635" y="240" text-anchor="middle" font-size="7" opacity="0.9">案例/模式</text>
+      </g>
+
+      <!-- 核心算法层 -->
+      <rect x="20" y="320" width="680" height="100" rx="8" fill="url(#coreGrad)" opacity="0.1"/>
+      <text x="30" y="340" font-family="serif" font-size="12" font-weight="700" fill="#355e56">核心算法层 · Core Algorithms</text>
+      <g font-family="sans-serif" font-size="9" fill="#fff">
+        <rect x="30" y="355" width="120" height="55" rx="4" fill="url(#coreGrad)"/>
+        <text x="90" y="378" text-anchor="middle" font-weight="600">AHP 层次分析</text>
+        <text x="90" y="395" text-anchor="middle" font-size="7" opacity="0.85">26 项指标权重</text>
+
+        <rect x="160" y="355" width="120" height="55" rx="4" fill="url(#coreGrad)"/>
+        <text x="220" y="378" text-anchor="middle" font-weight="600">耦合协调度</text>
+        <text x="220" y="395" text-anchor="middle" font-size="7" opacity="0.85">10 级划分</text>
+
+        <rect x="290" y="355" width="120" height="55" rx="4" fill="url(#coreGrad)"/>
+        <text x="350" y="378" text-anchor="middle" font-weight="600">障碍度模型</text>
+        <text x="350" y="395" text-anchor="middle" font-size="7" opacity="0.85">Top N 因子</text>
+
+        <rect x="420" y="355" width="120" height="55" rx="4" fill="url(#coreGrad)"/>
+        <text x="480" y="378" text-anchor="middle" font-weight="600">AI 智能建议</text>
+        <text x="480" y="395" text-anchor="middle" font-size="7" opacity="0.85">DeepSeek</text>
+
+        <rect x="550" y="355" width="140" height="55" rx="4" fill="url(#coreGrad)"/>
+        <text x="620" y="378" text-anchor="middle" font-weight="600">模式数据</text>
+        <text x="620" y="395" text-anchor="middle" font-size="7" opacity="0.85">5模式 · 27建议</text>
+      </g>
+
+      <!-- 数据层 -->
+      <rect x="20" y="450" width="680" height="80" rx="8" fill="url(#dataGrad)" opacity="0.1"/>
+      <text x="30" y="470" font-family="serif" font-size="12" font-weight="700" fill="#5e1429">数据存储层 · Data Storage</text>
+      <g font-family="sans-serif" font-size="9" fill="#fff">
+        <rect x="30" y="485" width="200" height="40" rx="4" fill="url(#dataGrad)"/>
+        <text x="130" y="502" text-anchor="middle" font-weight="600">数据库 · SQLite / MySQL</text>
+        <text x="130" y="517" text-anchor="middle" font-size="7" opacity="0.85">SQLAlchemy ORM</text>
+
+        <rect x="240" y="485" width="200" height="40" rx="4" fill="url(#dataGrad)"/>
+        <text x="340" y="502" text-anchor="middle" font-weight="600">PDF 报告 · reportlab</text>
+        <text x="340" y="517" text-anchor="middle" font-size="7" opacity="0.85">uploads/*.pdf</text>
+
+        <rect x="450" y="485" width="240" height="40" rx="4" fill="url(#dataGrad)"/>
+        <text x="570" y="502" text-anchor="middle" font-weight="600">DeepSeek AI · 大模型路径优化</text>
+        <text x="570" y="517" text-anchor="middle" font-size="7" opacity="0.85">OpenAI 兼容接口</text>
+      </g>
+
+      <!-- 箭头 -->
+      <line x1="360" y1="140" x2="360" y2="170" stroke="#666" stroke-width="1" marker-end="url(#arrowSmall)"/>
+      <line x1="360" y1="290" x2="360" y2="320" stroke="#666" stroke-width="1" marker-end="url(#arrowSmall)"/>
+      <line x1="360" y1="420" x2="360" y2="450" stroke="#666" stroke-width="1" marker-end="url(#arrowSmall)"/>
+    </svg>
+    <figcaption>绿脉兴农平台总体架构图</figcaption>
+  </figure>
+
+  <h2 class="section-title">技术选型</h2>
+
+  <p>平台技术选型兼顾成熟度、性能、可维护性与开源友好性，具体如下：</p>
+
+  <table class="three-line">
+    <caption>平台技术选型表</caption>
+    <thead>
+      <tr><th>层级</th><th>技术选型</th><th>版本</th><th>选用理由</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>前端框架</td><td>Vue 3</td><td>3.4</td><td>Composition API 响应式视图层</td></tr>
+      <tr><td>UI 组件库</td><td>Element Plus</td><td>2.6</td><td>企业级组件，文档完善</td></tr>
+      <tr><td>图表库</td><td>ECharts</td><td>5.5</td><td>功能丰富，性能优异</td></tr>
+      <tr><td>构建工具</td><td>Vite</td><td>5.4</td><td>极速热更新，开发体验佳</td></tr>
+      <tr><td>后端框架</td><td>FastAPI</td><td>0.111</td><td>高性能异步，自动生成文档</td></tr>
+      <tr><td>ORM 框架</td><td>SQLAlchemy</td><td>2.0</td><td>Python 生态成熟 ORM</td></tr>
+      <tr><td>数据库</td><td>SQLite → MySQL</td><td>—</td><td>开发用 SQLite，生产用 MySQL</td></tr>
+      <tr><td>身份认证</td><td>JWT</td><td>—</td><td>无状态鉴权，便于水平扩展</td></tr>
+      <tr><td>AI 引擎</td><td>DeepSeek API</td><td>—</td><td>国产开源大模型，中文表现优异</td></tr>
+      <tr><td>PDF 生成</td><td>reportlab</td><td>4.0</td><td>Python 原生 PDF 库</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">数据规模</h2>
+
+  <p>平台以长江三角洲地区 10 个典型区县为研究样本，覆盖江苏、浙江、安徽、四川四省，时间跨度为 2020—2024 年共 5 年。数据来源于《中国县域统计年鉴》《中国城市统计年鉴》及各地统计公报，经清洗后形成 50 条面板数据记录。</p>
+
+  <table class="three-line">
+    <caption>平台数据规模统计表</caption>
+    <thead>
+      <tr><th>维度</th><th>规模</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>样本区县数</td><td>10 个</td><td>江苏 6、浙江 2、安徽 1、四川 1</td></tr>
+      <tr><td>时间跨度</td><td>5 年</td><td>2020—2024 年面板数据</td></tr>
+      <tr><td>发展模式数</td><td>5 种</td><td>层次聚类分析得出</td></tr>
+      <tr><td>评估指标数</td><td>26 项</td><td>11 项生态 + 15 项振兴</td></tr>
+      <tr><td>准则层数</td><td>8 个</td><td>3 个生态 + 5 个振兴</td></tr>
+      <tr><td>协调等级数</td><td>10 级</td><td>极度失调至优质协调</td></tr>
+      <tr><td>路径建议数</td><td>27 条</td><td>每模式 5—6 条结构化建议</td></tr>
+      <tr><td>政策数量</td><td>25+ 条</td><td>国家、省、地市三级</td></tr>
+      <tr><td>典型案例数</td><td>5 个</td><td>每模式 1 个典型案例</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================
+     第三章 核心算法原理
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第三章 核心算法原理</h1>
+
+  <p>平台核心算法层集成五大数学方法：层次分析法（AHP）、耦合协调度模型（CCD）、障碍度模型、DeepSeek AI 智能引擎与层次聚类分析。各算法相互独立又彼此协同，共同支撑从数据到决策的完整闭环。</p>
+
+  <h2 class="section-title">AHP 层次分析法</h2>
+
+  <p>层次分析法（Analytic Hierarchy Process, AHP）由美国运筹学家 Saaty 于 20 世纪 70 年代提出，是一种将复杂决策问题分层结构化、通过专家判断量化各要素相对重要性的多准则决策方法。本平台采用 AHP 构建"目标层—准则层—指标层"三级递阶结构，计算 26 项指标的组合权重。</p>
+
+  <h3 class="subsection-title">指标体系构建</h3>
+
+  <p>生态产品价值实现成效指标体系包含 3 个准则层 11 项指标；乡村振兴水平指标体系包含 5 个准则层 15 项指标。准则层权重通过对专家判断矩阵求解最大特征值对应特征向量得出，并通过一致性检验（CR&lt;0.1）确保结果可靠。</p>
+
+  <h3 class="subsection-title">组合权重计算</h3>
+
+  <p>设准则层 B 对目标层 A 的权重为 $w_B$，指标层 C 对准则层 B 的权重为 $w_{C|B}$，则指标 C 对目标层 A 的组合权重为：</p>
+
+  <div class="formula-block">
+    W<sub>C</sub> = w<sub>B</sub> × w<sub>C|B</sub>
+    <span class="formula-num">(3-1)</span>
+  </div>
+
+  <p>所有指标组合权重之和为 1。以"地区生产总值"为例，其所属经济效益准则层权重为 0.6392，其在经济效益层内权重为 0.4192，则组合权重为 0.6392 × 0.4192 ≈ 0.2676。</p>
+
+  <h2 class="section-title">耦合协调度模型</h2>
+
+  <p>耦合协调度模型（Coupling Coordination Degree, CCD）用于测算两个或多个系统之间的协调发展水平。本平台运用该模型评估生态产品价值实现系统与乡村振兴系统之间的耦合协调度，判定两大系统是否同步发展。</p>
+
+  <h3 class="subsection-title">计算公式</h3>
+
+  <p>设 U1 为生态产品价值实现综合得分，U2 为乡村振兴综合得分（均归一化至 [0,1] 区间），则：</p>
+
+  <div class="formula-block">
+    C = 2·√(U<sub>1</sub>·U<sub>2</sub>) / (U<sub>1</sub> + U<sub>2</sub>)
+    <span class="formula-num">(3-2)</span>
+  </div>
+
+  <div class="formula-block">
+    T = α·U<sub>1</sub> + β·U<sub>2</sub>
+    <span class="formula-num">(3-3)</span>
+  </div>
+
+  <div class="formula-block">
+    D = √(C·T)
+    <span class="formula-num">(3-4)</span>
+  </div>
+
+  <p>其中，C 为耦合度，反映两系统相互作用强度；T 为综合协调指数，α、β 为待定系数，本平台取 α=β=0.5，表示两系统同等重要；D 为耦合协调度，反映两系统协调发展水平，取值范围 [0,1]。</p>
+
+  <h3 class="subsection-title">等级划分</h3>
+
+  <p>依据 D 值大小划分为 10 级协调等级，具体见表 3-1。</p>
+
+  <table class="three-line">
+    <caption>耦合协调度 10 级划分标准</caption>
+    <thead>
+      <tr><th>D 值区间</th><th>等级</th><th>类型</th><th>政策含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>[0.0, 0.1)</td><td>极度失调</td><td>失调类</td><td>系统严重失衡，亟需干预</td></tr>
+      <tr><td>[0.1, 0.2)</td><td>严重失调</td><td>失调类</td><td>系统失衡明显</td></tr>
+      <tr><td>[0.2, 0.3)</td><td>中度失调</td><td>失调类</td><td>系统失衡，需重点改进</td></tr>
+      <tr><td>[0.3, 0.4)</td><td>轻度失调</td><td>失调类</td><td>系统轻度失衡</td></tr>
+      <tr><td>[0.4, 0.5)</td><td>濒临失调</td><td>过渡类</td><td>接近失调边缘</td></tr>
+      <tr><td>[0.5, 0.6)</td><td>勉强协调</td><td>过渡类</td><td>初步协调，基础薄弱</td></tr>
+      <tr><td>[0.6, 0.7)</td><td>初级协调</td><td>协调类</td><td>协调水平较低</td></tr>
+      <tr><td>[0.7, 0.8)</td><td>中级协调</td><td>协调类</td><td>协调水平中等</td></tr>
+      <tr><td>[0.8, 0.9)</td><td>良好协调</td><td>协调类</td><td>协调水平较好</td></tr>
+      <tr><td>[0.9, 1.0]</td><td>优质协调</td><td>协调类</td><td>系统高度协同发展</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">障碍度模型</h2>
+
+  <p>障碍度模型用于识别制约系统协同发展的关键障碍因子，为精准施策提供依据。本平台基于指标偏离度与权重计算各指标的障碍度，按降序排列取前 N 项作为主要障碍因子。</p>
+
+  <h3 class="subsection-title">计算步骤</h3>
+
+  <p>步骤 1：对指标原始值进行 min-max 归一化处理。</p>
+
+  <div class="formula-block">
+    X<sub>norm</sub> = (X - X<sub>min</sub>) / (X<sub>max</sub> - X<sub>min</sub>)
+    <span class="formula-num">(3-5)</span>
+  </div>
+
+  <p>步骤 2：计算指标偏离度，即指标距离目标值 1 的差距。</p>
+
+  <div class="formula-block">
+    Deviation = 1 - X<sub>norm</sub>
+    <span class="formula-num">(3-6)</span>
+  </div>
+
+  <p>步骤 3：计算指标障碍度。</p>
+
+  <div class="formula-block">
+    O<sub>i</sub> = Deviation<sub>i</sub> × W<sub>i</sub>
+    <span class="formula-num">(3-7)</span>
+  </div>
+
+  <p>步骤 4：按障碍度降序排列，取前 N 项作为主要障碍因子。本平台默认取 Top 5。</p>
+
+  <h2 class="section-title">DeepSeek AI 智能引擎</h2>
+
+  <p>DeepSeek 是一款国产开源大语言模型，支持中英双语，在中文语境下具备优异的领域理解与生成能力。本平台通过 OpenAI 兼容接口调用 DeepSeek-V3 模型，基于评估结果与模式判定生成差异化路径优化建议。</p>
+
+  <h3 class="subsection-title">输入设计</h3>
+
+  <p>AI 引擎输入采用结构化 prompt，包含以下要素：</p>
+
+  <ul>
+    <li>地区名称与评估年份</li>
+    <li>26 项指标原始数据</li>
+    <li>生态得分、乡村振兴得分、D 值</li>
+    <li>判定模式与识别理由</li>
+    <li>Top 5 障碍因子</li>
+  </ul>
+
+  <h3 class="subsection-title">输出规范</h3>
+
+  <p>AI 引擎输出 500—800 字结构化建议，涵盖产业发展、生态保护、社会治理、人才振兴等多维度，语言风格贴近政府决策报告。为保障稳定性，平台配置规则版兜底逻辑：当 API 不可用时，自动调用预置的 27 条结构化建议，确保功能完整。</p>
+
+  <h2 class="section-title">层次聚类分析</h2>
+
+  <p>层次聚类分析（Hierarchical Cluster Analysis）用于将 10 个样本区县按特征相似度划分为若干类别，提取典型发展模式。本平台采用 Ward 最小方差法进行层次聚类，并通过主成分分析（PCA）将多维指标降维至二维平面，便于可视化展示。</p>
+
+  <h3 class="subsection-title">聚类步骤</h3>
+
+  <ol>
+    <li>对 26 项指标数据进行标准化处理（Z-score 标准化）。</li>
+    <li>计算样本间欧氏距离矩阵。</li>
+    <li>采用 Ward 法进行层次聚类，合并类内方差最小的簇。</li>
+    <li>通过肘部法则与轮廓系数确定最佳聚类数为 5。</li>
+    <li>对标准化数据进行 PCA 降维，提取 PC1、PC2 两个主成分用于散点图可视化。</li>
+  </ol>
+
+  <p>聚类结果将 10 个区县划分为 5 种模式，每种模式具有显著差异化的指标特征，详见第五章。</p>
+</div>
+
+<!-- ============================================================
+     第四章 功能模块设计
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第四章 功能模块设计</h1>
+
+  <p>平台前端共设计 7 个功能模块，覆盖政策检索、智能评估、数据可视化、农产品交易、案例学习与用户管理等场景。各模块通过 Vue Router 统一路由管理，通过 Pinia 进行状态共享。</p>
+
+  <h2 class="section-title">首页门户</h2>
+
+  <p>首页（HomeView）作为平台门户，承担品牌展示与功能导航职责，主要包含以下区块：</p>
+
+  <ul>
+    <li><strong>Hero 区</strong>：展示品牌标识、参赛信息与核心数据（5 模式/4 模型/27 指标/AI）。</li>
+    <li><strong>核心方法论</strong>：以卡片形式展示 AHP、熵权法、耦合协调度、障碍度四大模型简介。</li>
+    <li><strong>四大功能</strong>：政策中心、智能分析、农产品商城、案例中心的入口卡片。</li>
+    <li><strong>五种模式</strong>：5 种发展模式的横向展示卡，含模式名称、识别阈值与路径方向。</li>
+    <li><strong>评估流程</strong>：上传数据 → 模型评估 → AI 识别 → 路径优化 → PDF 报告五步流程图。</li>
+  </ul>
+
+  <h2 class="section-title">政策中心</h2>
+
+  <p>政策中心（PolicyView）汇集国家级、省级、地市级乡村振兴与生态产品价值实现相关政策，为地方政府决策提供政策依据。功能要点如下：</p>
+
+  <ul>
+    <li><strong>多维检索</strong>：支持主题分类（生态补偿、产业发展、人才振兴等）、政策级别、关键词组合检索。</li>
+    <li><strong>统计概览</strong>：展示政策总数、国家级、省级、地市级数量统计卡。</li>
+    <li><strong>杂志式列表</strong>：每条政策以卡片形式展示序号、分类标签、级别标签、发布地区、发布日期与政策摘要。</li>
+    <li><strong>分页加载</strong>：支持翻页浏览大量政策，单页默认 10 条。</li>
+  </ul>
+
+  <h2 class="section-title">智能分析中心</h2>
+
+  <p>智能分析中心（AnalysisView）是平台核心模块，采用 3 标签页架构，覆盖完整评估闭环。</p>
+
+  <h3 class="subsection-title">Tab 1：综合评估</h3>
+
+  <p>该标签页实现完整的智能评估工作流，采用左右双栏布局。左侧为数据录入区，右侧为结果展示区。</p>
+
+  <p><strong>输入区</strong>包含：地区名称、评估年份、11 项生态产品价值实现指标、15 项乡村振兴水平指标，并提供"加载模板"按钮一键填充指标结构。</p>
+
+  <p><strong>结果展示区</strong>包含以下卡片：</p>
+
+  <table class="three-line">
+    <caption>综合评估结果展示内容</caption>
+    <thead>
+      <tr><th>卡片</th><th>展示内容</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>综合得分卡</td><td>生态产品得分 / 乡村振兴得分（0—100）+ 进度条</td></tr>
+      <tr><td>耦合协调度</td><td>D 值（0—1）+ 10 级协调等级标签</td></tr>
+      <tr><td>AI 模式识别</td><td>模式名称 + 识别理由 + AI 印章</td></tr>
+      <tr><td>模式识别标准</td><td>模式特征标签 + 核心要素列表 + 量化阈值表</td></tr>
+      <tr><td>维度雷达图</td><td>8 维度（生态/经济/社会/产业/生态/乡风/治理/生活）双系统对比</td></tr>
+      <tr><td>障碍因子图</td><td>Top 5 障碍因子横向条形图</td></tr>
+      <tr><td>结构化建议</td><td>27 条差异化路径优化建议</td></tr>
+      <tr><td>AI 综合建议</td><td>DeepSeek 生成的 500—800 字综合建议</td></tr>
+      <tr><td>PDF 导出</td><td>一键下载专业评估报告</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsection-title">Tab 2：模式识别标准</h3>
+
+  <p>该标签页以手风琴折叠面板形式展示 5 种生态产品价值实现模式的量化识别标准，每种模式包含：代表区县、模式定义、模式特点、核心要素、识别阈值表（指标 / 运算符 / 阈值 / 单位 / 是否必需）。</p>
+
+  <h3 class="subsection-title">Tab 3：耦合协调度工具</h3>
+
+  <p>该标签页提供独立的耦合协调度计算器，无需上传完整数据即可快速测算。用户输入 U1（生态得分，0—100）与 U2（乡村振兴得分，0—100），系统实时计算 C、T、D 三个值并输出等级标签，通过 ECharts gauge 仪表盘动态展示 D 值落点，并展示 10 级划分标准网格，当前等级高亮显示。</p>
+
+  <h2 class="section-title">数据大屏</h2>
+
+  <p>数据大屏（DashboardView）基于 10 区县 5 年面板数据，构建多维可视化分析界面。控制面板支持对比指标切换（生态得分/乡村振兴/D值/森林覆盖率/农村收入/GDP）与年份切换（2020—2024）。</p>
+
+  <p>统计卡展示样本区县数、观察年份、聚类模式数与当年最高指标值及对应区县名。可视化图表包含以下六类：</p>
+
+  <table class="three-line">
+    <caption>数据大屏图表清单</caption>
+    <thead>
+      <tr><th>图表名称</th><th>类型</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>横向对比</td><td>柱状图</td><td>当年 10 区县按指标降序，按模式分色</td></tr>
+      <tr><td>时间演化</td><td>折线图</td><td>5 年趋势，按模式分色</td></tr>
+      <tr><td>模式雷达</td><td>雷达图</td><td>5 模式代表区县五维得分对比</td></tr>
+      <tr><td>耦合散点</td><td>散点图</td><td>生态得分 vs 振兴得分，对角线为 D=1</td></tr>
+      <tr><td>AHP 权重</td><td>横向条形图</td><td>26 项指标组合权重可视化</td></tr>
+      <tr><td>聚类散点</td><td>散点图</td><td>10 区县 PC1/PC2 主成分降维坐标</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">农产品商城</h2>
+
+  <p>农产品商城（MallView）面向农户与合作社，提供生态农产品展示与交易功能。主要特性包括：分类筛选（茶叶、水果、水产、农副等品类）、关键词搜索、商品卡片（图片、生态认证标签、产地、价格、库存）、抽屉式购物车（数量调整、单品删除、合计结算）、商家角色可上架自有商品（含图片、价格、库存）。</p>
+
+  <h2 class="section-title">案例中心</h2>
+
+  <p>案例中心（CaseView）展示 5 种模式的典型案例，便于用户借鉴成功经验。支持模式标签筛选，点击卡片弹出 3 标签页详情弹窗：案例详情、模式识别标准（该案例所属模式的量化识别标准）、路径优化建议（27 条差异化建议按模式匹配）。</p>
+
+  <h2 class="section-title">用户中心</h2>
+
+  <p>用户中心（UserView）提供注册、登录与个人面板功能。支持普通用户与商家两种角色注册，采用 JWT 无状态鉴权机制。个人面板展示评估历史记录、政策收藏与订单管理。</p>
+</div>
+
+<!-- ============================================================
+     第五章 五种发展模式
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第五章 五种发展模式</h1>
+
+  <h2 class="section-title">模式提取方法</h2>
+
+  <p>平台以 10 个样本区县 26 项指标数据为基础，通过层次聚类分析（Ward 法）提取 5 种典型发展模式。提取流程如下：</p>
+
+  <figure>
+    <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="modeFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0d3b2e"/>
+          <stop offset="100%" stop-color="#c79a00"/>
+        </linearGradient>
+        <marker id="arrowFlow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <polygon points="0,0 10,3 0,6" fill="#c79a00"/>
+        </marker>
+      </defs>
+
+      <g font-family="serif" font-size="11" fill="#fff">
+        <rect x="20" y="80" width="120" height="80" rx="6" fill="url(#modeFlowGrad)"/>
+        <text x="80" y="110" text-anchor="middle" font-weight="700">10 个区县</text>
+        <text x="80" y="130" text-anchor="middle" font-size="9" opacity="0.85">26 项指标</text>
+        <text x="80" y="145" text-anchor="middle" font-size="9" opacity="0.85">5 年面板数据</text>
+
+        <rect x="170" y="80" width="120" height="80" rx="6" fill="url(#modeFlowGrad)"/>
+        <text x="230" y="110" text-anchor="middle" font-weight="700">标准化处理</text>
+        <text x="230" y="130" text-anchor="middle" font-size="9" opacity="0.85">Z-score 标准化</text>
+        <text x="230" y="145" text-anchor="middle" font-size="9" opacity="0.85">消除量纲影响</text>
+
+        <rect x="320" y="80" width="120" height="80" rx="6" fill="url(#modeFlowGrad)"/>
+        <text x="380" y="110" text-anchor="middle" font-weight="700">层次聚类</text>
+        <text x="380" y="130" text-anchor="middle" font-size="9" opacity="0.85">Ward 最小方差法</text>
+        <text x="380" y="145" text-anchor="middle" font-size="9" opacity="0.85">轮廓系数验证</text>
+
+        <rect x="470" y="80" width="120" height="80" rx="6" fill="url(#modeFlowGrad)"/>
+        <text x="530" y="110" text-anchor="middle" font-weight="700">PCA 降维</text>
+        <text x="530" y="130" text-anchor="middle" font-size="9" opacity="0.85">主成分分析</text>
+        <text x="530" y="145" text-anchor="middle" font-size="9" opacity="0.85">PC1 + PC2 可视化</text>
+
+        <rect x="620" y="80" width="80" height="80" rx="6" fill="#c79a00"/>
+        <text x="660" y="110" text-anchor="middle" font-weight="700">5 种</text>
+        <text x="660" y="130" text-anchor="middle" font-size="9" fill="#fff">发展模式</text>
+      </g>
+
+      <line x1="140" y1="120" x2="170" y2="120" stroke="#c79a00" stroke-width="2" marker-end="url(#arrowFlow)"/>
+      <line x1="290" y1="120" x2="320" y2="120" stroke="#c79a00" stroke-width="2" marker-end="url(#arrowFlow)"/>
+      <line x1="440" y1="120" x2="470" y2="120" stroke="#c79a00" stroke-width="2" marker-end="url(#arrowFlow)"/>
+      <line x1="590" y1="120" x2="620" y2="120" stroke="#c79a00" stroke-width="2" marker-end="url(#arrowFlow)"/>
+
+      <text x="360" y="200" text-anchor="middle" font-family="serif" font-size="10" fill="#666">图 5-1 模式提取流程</text>
+    </svg>
+    <figcaption>五种模式提取流程图</figcaption>
+  </figure>
+
+  <h2 class="section-title">模式详细说明</h2>
+
+  <p>5 种发展模式在资源禀赋、产业特征、区位条件等方面呈现显著差异，具体如表 5-1 所示。</p>
+
+  <table>
+    <caption>五种发展模式特征对比</caption>
+    <thead>
+      <tr>
+        <th>模式</th>
+        <th>代表区县</th>
+        <th>核心识别阈值</th>
+        <th>路径优化方向</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>生态康养型</td>
+        <td>黟县、蒲江</td>
+        <td>森林覆盖率≥65%、城镇化率≤55%、空气优良率≥80%</td>
+        <td>森林康养基地、气候疗养产品、康养小镇品牌</td>
+      </tr>
+      <tr>
+        <td>湿地水域型</td>
+        <td>合肥、雄安</td>
+        <td>水质达标率≥95%、重要生态保护区面积突出</td>
+        <td>湿地公园、保水渔业、水权交易、碳汇交易</td>
+      </tr>
+      <tr>
+        <td>农业品牌型</td>
+        <td>盱眙、兴化</td>
+        <td>粮食播种面积≥10万公顷、农产品产出≥90万吨</td>
+        <td>区域公用品牌、三品一标、精深加工产业链</td>
+      </tr>
+      <tr>
+        <td>农文旅融合型</td>
+        <td>五指山、嘉定</td>
+        <td>森林覆盖率≥15%、空气优良率≥80%、文化资源丰富</td>
+        <td>研学线路、文创工坊、乡村节庆、特色民宿</td>
+      </tr>
+      <tr>
+        <td>城郊消费型</td>
+        <td>高淳、溧水</td>
+        <td>城镇化率≥70%、GDP≥1000亿、农村人均收入≥4万元</td>
+        <td>都市农园、采摘体验、城郊综合体、周末经济</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="centerMode" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#c79a00" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#c79a00" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <circle cx="360" cy="230" r="180" fill="url(#centerMode)"/>
+      <circle cx="360" cy="230" r="50" fill="#0d3b2e"/>
+      <text x="360" y="225" text-anchor="middle" font-family="serif" font-size="12" font-weight="700" fill="#fff">10 个</text>
+      <text x="360" y="243" text-anchor="middle" font-family="serif" font-size="12" font-weight="700" fill="#fff">样本区县</text>
+
+      <g font-family="serif" font-size="10">
+        <!-- 模式 1 -->
+        <line x1="360" y1="180" x2="160" y2="80" stroke="#2d6a4f" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="160" cy="80" r="50" fill="#2d6a4f"/>
+        <text x="160" y="75" text-anchor="middle" font-weight="700" fill="#fff">生态康养型</text>
+        <text x="160" y="90" text-anchor="middle" font-size="8" fill="#fff">FOREST</text>
+        <text x="160" y="140" text-anchor="middle" font-size="9" fill="#2d6a4f">黟县 · 蒲江</text>
+        <text x="160" y="155" text-anchor="middle" font-size="8" fill="#666">森林覆盖率 ≥65%</text>
+
+        <!-- 模式 2 -->
+        <line x1="360" y1="180" x2="560" y2="80" stroke="#4a90c2" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="560" cy="80" r="50" fill="#4a90c2"/>
+        <text x="560" y="75" text-anchor="middle" font-weight="700" fill="#fff">湿地水域型</text>
+        <text x="560" y="90" text-anchor="middle" font-size="8" fill="#fff">WATER</text>
+        <text x="560" y="140" text-anchor="middle" font-size="9" fill="#4a90c2">合肥 · 雄安</text>
+        <text x="560" y="155" text-anchor="middle" font-size="8" fill="#666">水质达标率 ≥95%</text>
+
+        <!-- 模式 3 -->
+        <line x1="360" y1="280" x2="160" y2="380" stroke="#c79a00" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="160" cy="380" r="50" fill="#c79a00"/>
+        <text x="160" y="375" text-anchor="middle" font-weight="700" fill="#fff">农业品牌型</text>
+        <text x="160" y="390" text-anchor="middle" font-size="8" fill="#fff">BRAND</text>
+        <text x="160" y="440" text-anchor="middle" font-size="9" fill="#c79a00">盱眙 · 兴化</text>
+        <text x="160" y="455" text-anchor="middle" font-size="8" fill="#666">粮食面积 ≥10万公顷</text>
+
+        <!-- 模式 4 -->
+        <line x1="360" y1="280" x2="360" y2="380" stroke="#c97b5b" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="360" cy="380" r="50" fill="#c97b5b"/>
+        <text x="360" y="375" text-anchor="middle" font-weight="700" fill="#fff">农文旅融合</text>
+        <text x="360" y="390" text-anchor="middle" font-size="8" fill="#fff">FUSION</text>
+        <text x="360" y="440" text-anchor="middle" font-size="9" fill="#c97b5b">五指山 · 嘉定</text>
+        <text x="360" y="455" text-anchor="middle" font-size="8" fill="#666">森林覆盖率 ≥15%</text>
+
+        <!-- 模式 5 -->
+        <line x1="360" y1="280" x2="560" y2="380" stroke="#8b1e3f" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="560" cy="380" r="50" fill="#8b1e3f"/>
+        <text x="560" y="375" text-anchor="middle" font-weight="700" fill="#fff">城郊消费型</text>
+        <text x="560" y="390" text-anchor="middle" font-size="8" fill="#fff">SUBURBAN</text>
+        <text x="560" y="440" text-anchor="middle" font-size="9" fill="#8b1e3f">高淳 · 溧水</text>
+        <text x="560" y="455" text-anchor="middle" font-size="8" fill="#666">城镇化率 ≥70%</text>
+      </g>
+    </svg>
+    <figcaption>五种发展模式分布示意图</figcaption>
+  </figure>
+
+  <h2 class="section-title">路径优化建议矩阵</h2>
+
+  <p>每种模式配备 5—6 条结构化路径优化建议，合计 27 条。每条建议包含建议编号、建议标题与建议详情三部分。路径优化建议矩阵如表 5-2 所示。</p>
+
+  <table>
+    <caption>路径优化建议矩阵</caption>
+    <thead>
+      <tr>
+        <th>模式</th>
+        <th>建议数</th>
+        <th>重点方向示例</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>生态康养型</td>
+        <td>6 条</td>
+        <td>森林康养基地、气候疗养产品、康养小镇品牌、康养旅居产品</td>
+      </tr>
+      <tr>
+        <td>湿地水域型</td>
+        <td>5 条</td>
+        <td>湿地公园、保水渔业、水权交易、碳汇交易、生态补偿</td>
+      </tr>
+      <tr>
+        <td>农业品牌型</td>
+        <td>6 条</td>
+        <td>区域公用品牌、三品一标、精深加工、电商直播、冷链物流</td>
+      </tr>
+      <tr>
+        <td>农文旅融合型</td>
+        <td>5 条</td>
+        <td>研学线路、文创工坊、乡村节庆、特色民宿、文化 IP 打造</td>
+      </tr>
+      <tr>
+        <td>城郊消费型</td>
+        <td>5 条</td>
+        <td>都市农园、采摘体验、城郊综合体、周末经济、社区团购</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================
+     第六章 关键流程实现
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第六章 关键流程实现</h1>
+
+  <h2 class="section-title">智能评估流程</h2>
+
+  <p>智能评估是平台核心流程，涵盖从用户数据录入到 PDF 报告生成的完整闭环。流程时序如图 6-1 所示。</p>
+
+  <figure>
+    <svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="actorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0d3b2e"/>
+          <stop offset="100%" stop-color="#2d6a4f"/>
+        </linearGradient>
+        <marker id="arrSeq" markerWidth="8" markerHeight="8" refX="6" refY="2" orient="auto">
+          <polygon points="0,0 8,2 0,4" fill="#666"/>
+        </marker>
+      </defs>
+
+      <!-- Actor 头 -->
+      <g font-family="sans-serif" font-size="10" fill="#fff">
+        <rect x="40" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="100" y="40" text-anchor="middle" font-weight="600">用户 User</text>
+
+        <rect x="220" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="280" y="40" text-anchor="middle" font-weight="600">前端 Frontend</text>
+
+        <rect x="400" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="460" y="40" text-anchor="middle" font-weight="600">后端 Backend</text>
+
+        <rect x="560" y="20" width="140" height="30" rx="4" fill="#8b1e3f"/>
+        <text x="630" y="40" text-anchor="middle" font-weight="600">DeepSeek AI</text>
+      </g>
+
+      <!-- Lifeline -->
+      <line x1="100" y1="50" x2="100" y2="380" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="280" y1="50" x2="280" y2="380" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="460" y1="50" x2="460" y2="380" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="630" y1="50" x2="630" y2="380" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+      <!-- 消息 -->
+      <g font-family="sans-serif" font-size="9" fill="#333">
+        <line x1="100" y1="80" x2="280" y2="80" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="190" y="75" text-anchor="middle">1. 填写指标数据</text>
+
+        <line x1="280" y1="110" x2="460" y2="110" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="370" y="105" text-anchor="middle">2. POST /analysis/assess</text>
+
+        <rect x="430" y="130" width="60" height="60" fill="#f5f5f5" stroke="#999" stroke-width="0.5"/>
+        <text x="460" y="150" text-anchor="middle" font-size="8">3. AHP 加权</text>
+        <text x="460" y="165" text-anchor="middle" font-size="8">评分</text>
+        <text x="460" y="180" text-anchor="middle" font-size="8">CCD 计算</text>
+
+        <line x1="460" y1="210" x2="630" y2="210" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="545" y="205" text-anchor="middle">4. 调用 AI 生成建议</text>
+
+        <line x1="630" y1="240" x2="460" y2="240" stroke="#666" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrSeq)"/>
+        <text x="545" y="235" text-anchor="middle">5. 返回 500-800 字建议</text>
+
+        <line x1="460" y1="270" x2="280" y2="270" stroke="#666" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrSeq)"/>
+        <text x="370" y="265" text-anchor="middle">6. 返回完整评估结果</text>
+
+        <line x1="280" y1="300" x2="100" y2="300" stroke="#666" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrSeq)"/>
+        <text x="190" y="295" text-anchor="middle">7. 展示得分+雷达图+建议</text>
+
+        <line x1="100" y1="330" x2="280" y2="330" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="190" y="325" text-anchor="middle">8. 点击下载 PDF</text>
+
+        <line x1="280" y1="360" x2="460" y2="360" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="370" y="355" text-anchor="middle">9. GET /analysis/{id}/report</text>
+      </g>
+    </svg>
+    <figcaption>智能评估流程时序图</figcaption>
+  </figure>
+
+  <p>具体步骤说明如下：</p>
+
+  <ol>
+    <li><strong>数据录入</strong>：用户在 AnalysisView Tab 1 录入地区名称、评估年份及 26 项指标数据。</li>
+    <li><strong>请求提交</strong>：前端通过 POST /analysis/assess 接口提交数据，请求体为 JSON 格式。</li>
+    <li><strong>模型计算</strong>：后端依次执行 AHP 加权综合评分、耦合协调度计算、障碍度模型识别 Top 5 因子。</li>
+    <li><strong>AI 调用</strong>：后端调用 DeepSeek API，传入评估结果与模式判定信息，请求生成路径建议。</li>
+    <li><strong>AI 响应</strong>：DeepSeek 返回 500—800 字结构化建议，后端进行格式校验与兜底处理。</li>
+    <li><strong>结果返回</strong>：后端将完整评估结果（含得分、D 值、模式、建议等）以 JSON 格式返回前端。</li>
+    <li><strong>结果展示</strong>：前端渲染得分卡、雷达图、障碍图、建议卡片等组件。</li>
+    <li><strong>PDF 请求</strong>：用户点击"下载 PDF"按钮，前端发起 GET /analysis/{id}/report 请求。</li>
+    <li><strong>PDF 生成</strong>：后端调用 reportlab 库生成 PDF 报告，含综合得分、图表与建议，返回文件流。</li>
+  </ol>
+
+  <h2 class="section-title">商城交易流程</h2>
+
+  <p>商城交易流程涵盖用户浏览商品、加入购物车、提交订单的完整链路，流程时序如图 6-2 所示。</p>
+
+  <figure>
+    <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="sans-serif" font-size="10" fill="#fff">
+        <rect x="40" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="100" y="40" text-anchor="middle" font-weight="600">用户 User</text>
+
+        <rect x="220" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="280" y="40" text-anchor="middle" font-weight="600">前端 Frontend</text>
+
+        <rect x="400" y="20" width="120" height="30" rx="4" fill="url(#actorGrad)"/>
+        <text x="460" y="40" text-anchor="middle" font-weight="600">后端 Backend</text>
+      </g>
+
+      <line x1="100" y1="50" x2="100" y2="260" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="280" y1="50" x2="280" y2="260" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="460" y1="50" x2="460" y2="260" stroke="#999" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+      <g font-family="sans-serif" font-size="9" fill="#333">
+        <line x1="100" y1="80" x2="280" y2="80" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="190" y="75" text-anchor="middle">1. 浏览商品</text>
+
+        <line x1="280" y1="110" x2="460" y2="110" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="370" y="105" text-anchor="middle">2. GET /mall/products</text>
+
+        <line x1="460" y1="140" x2="280" y2="140" stroke="#666" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrSeq)"/>
+        <text x="370" y="135" text-anchor="middle">3. 返回商品列表</text>
+
+        <line x1="280" y1="170" x2="100" y2="170" stroke="#666" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrSeq)"/>
+        <text x="190" y="165" text-anchor="middle">4. 展示商品卡片</text>
+
+        <line x1="100" y1="200" x2="280" y2="200" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="190" y="195" text-anchor="middle">5. 加入购物车 / 提交订单</text>
+
+        <line x1="280" y1="230" x2="460" y2="230" stroke="#666" stroke-width="1" marker-end="url(#arrSeq)"/>
+        <text x="370" y="225" text-anchor="middle">6. POST /mall/orders（扣库存+建订单）</text>
+      </g>
+    </svg>
+    <figcaption>商城交易流程时序图</figcaption>
+  </figure>
+
+  <p>商城模块采用前后端分离架构，购物车状态由前端 Pinia 管理，提交订单时统一与后端交互。后端在创建订单时进行库存校验与扣减，保证数据一致性。</p>
+</div>
+
+<!-- ============================================================
+     第七章 API 接口规范
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第七章 API 接口规范</h1>
+
+  <p>平台后端基于 FastAPI 框架开发，所有接口遵循 RESTful 规范，支持 JSON 格式请求与响应。启动后可通过 /docs 访问 Swagger UI 自动文档，通过 /redoc 访问 ReDoc 文档。本章列出全部 API 端点规范。</p>
+
+  <h2 class="section-title">鉴权 API（auth.py）</h2>
+
+  <table class="three-line">
+    <caption>鉴权 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th><th>鉴权</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/auth/register</td><td>POST</td><td>用户注册（用户名/邮箱/密码/角色）</td><td>否</td></tr>
+      <tr><td>/auth/login</td><td>POST</td><td>用户登录，返回 JWT Token</td><td>否</td></tr>
+      <tr><td>/auth/me</td><td>GET</td><td>获取当前用户信息</td><td>是</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">政策 API（policy.py）</h2>
+
+  <table class="three-line">
+    <caption>政策 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/policy/list</td><td>GET</td><td>政策列表（支持分页/筛选）</td></tr>
+      <tr><td>/policy/{id}</td><td>GET</td><td>政策详情</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">智能分析 API（analysis.py）</h2>
+
+  <p>智能分析 API 是平台核心模块，共提供 10 个端点，覆盖评估、模式识别、路径建议、耦合计算、障碍诊断等场景。</p>
+
+  <table class="three-line">
+    <caption>智能分析 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/analysis/template</td><td>GET</td><td>获取指标模板（26 项指标）</td></tr>
+      <tr><td>/analysis/assess</td><td>POST</td><td>智能评估（核心接口）</td></tr>
+      <tr><td>/analysis/{id}/report</td><td>GET</td><td>生成 PDF 报告</td></tr>
+      <tr><td>/analysis/mode-criteria</td><td>GET</td><td>5 种模式识别标准</td></tr>
+      <tr><td>/analysis/mode-suggestions/{mode}</td><td>GET</td><td>模式路径优化建议</td></tr>
+      <tr><td>/analysis/ahp-weights</td><td>GET</td><td>AHP 组合权重</td></tr>
+      <tr><td>/analysis/cluster-results</td><td>GET</td><td>10 区县聚类结果</td></tr>
+      <tr><td>/analysis/coordination-levels</td><td>GET</td><td>10 级协调等级标准</td></tr>
+      <tr><td>/analysis/coupling-calculate</td><td>GET</td><td>耦合协调度计算器</td></tr>
+      <tr><td>/analysis/obstacle-diagnose</td><td>POST</td><td>障碍因子诊断</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">数据大屏 API（dashboard.py）</h2>
+
+  <table class="three-line">
+    <caption>数据大屏 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/dashboard/compare</td><td>GET</td><td>区县横向对比数据</td></tr>
+      <tr><td>/dashboard/trend</td><td>GET</td><td>5 年时间序列数据</td></tr>
+      <tr><td>/dashboard/mode-radar</td><td>GET</td><td>模式雷达图数据</td></tr>
+      <tr><td>/dashboard/scatter</td><td>GET</td><td>耦合散点图数据</td></tr>
+      <tr><td>/dashboard/weights</td><td>GET</td><td>AHP 权重数据</td></tr>
+      <tr><td>/dashboard/cluster</td><td>GET</td><td>聚类散点图数据</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">商城 API（mall.py）</h2>
+
+  <table class="three-line">
+    <caption>商城 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/mall/products</td><td>GET</td><td>商品列表（支持分类/搜索）</td></tr>
+      <tr><td>/mall/products</td><td>POST</td><td>商家上架商品</td></tr>
+      <tr><td>/mall/orders</td><td>POST</td><td>创建订单</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">案例 API（case.py）</h2>
+
+  <table class="three-line">
+    <caption>案例 API 端点</caption>
+    <thead>
+      <tr><th>端点</th><th>方法</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>/case/list</td><td>GET</td><td>案例列表（支持模式筛选）</td></tr>
+      <tr><td>/case/{id}</td><td>GET</td><td>案例详情</td></tr>
+      <tr><td>/case/mode-criteria</td><td>GET</td><td>5 种模式标准</td></tr>
+      <tr><td>/case/{id}/suggestions</td><td>GET</td><td>案例模式路径建议</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================
+     第八章 部署与运维
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第八章 部署与运维</h1>
+
+  <h2 class="section-title">环境要求</h2>
+
+  <p>平台部署需满足以下软件环境要求：</p>
+
+  <table class="three-line">
+    <caption>部署环境要求</caption>
+    <thead>
+      <tr><th>组件</th><th>版本要求</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Python</td><td>≥ 3.10</td><td>后端运行环境</td></tr>
+      <tr><td>Node.js</td><td>≥ 18.0</td><td>前端构建环境</td></tr>
+      <tr><td>npm</td><td>≥ 9.0</td><td>前端包管理</td></tr>
+      <tr><td>SQLite</td><td>≥ 3.35</td><td>开发数据库（默认）</td></tr>
+      <tr><td>MySQL</td><td>≥ 8.0</td><td>生产数据库（可选）</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">后端启动</h2>
+
+  <p>后端基于 FastAPI 框架，启动步骤如下：</p>
+
+  <pre>cd greenpulse/backend
+python -m venv venv
+venv\Scripts\activate              # Windows
+# source venv/bin/activate         # Linux/Mac
+pip install -r requirements.txt
+python run.py                      # 默认 http://localhost:8000</pre>
+
+  <p>启动成功后可访问以下地址：</p>
+
+  <ul>
+    <li>API 服务：http://localhost:8000</li>
+    <li>Swagger 文档：http://localhost:8000/docs</li>
+    <li>ReDoc 文档：http://localhost:8000/redoc</li>
+  </ul>
+
+  <h2 class="section-title">前端启动</h2>
+
+  <p>前端基于 Vue 3 + Vite，启动步骤如下：</p>
+
+  <pre>cd greenpulse/frontend
+npm install
+npm run dev                        # 开发模式，默认 http://localhost:5173
+npm run build                      # 生产构建到 dist/ 目录</pre>
+
+  <h2 class="section-title">DeepSeek AI 配置</h2>
+
+  <p>平台支持通过环境变量配置 DeepSeek API Key，启用 AI 智能建议功能。配置方法如下：</p>
+
+  <pre># 编辑 backend/.env 文件
+DEEPSEEK_API_KEY=sk-your-key-here
+DEEPSEEK_BASE_URL=https://api.deepseek.com/v1</pre>
+
+  <div class="callout-box">
+    <div class="callout-box-title">兜底机制说明</div>
+    <p>未配置 API Key 时，平台自动启用规则版建议兜底机制，调用预置的 27 条结构化建议，确保所有功能可完整演示。AI 不可用时不会影响核心评估流程。</p>
+  </div>
+
+  <h2 class="section-title">生产部署</h2>
+
+  <p>平台支持两种生产部署方案：</p>
+
+  <h3 class="subsection-title">方案一：Railway 部署（推荐）</h3>
+
+  <p>Railway 是一款现代化的云原生部署平台，支持 Python 与 Node.js 应用一键部署。平台已在仓库根目录配置 railway.json 文件，关联 GitHub 仓库后即可自动部署后端服务。</p>
+
+  <h3 class="subsection-title">方案二：Vercel + 自建后端</h3>
+
+  <p>前端可部署至 Vercel，后端部署至任意支持 Python 的云服务器（如阿里云 ECS、腾讯云 CVM）。平台已配置 vercel.json 文件支持前端一键部署。后端建议使用 Nginx + Uvicorn 进行生产部署：</p>
+
+  <pre># 使用 uvicorn workers 部署
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+
+# Nginx 反向代理配置示例
+location /api/ {
+    proxy_pass http://127.0.0.1:8000/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}</pre>
+</div>
+
+<!-- ============================================================
+     第九章 总结与展望
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">第九章 总结与展望</h1>
+
+  <h2 class="section-title">工作总结</h2>
+
+  <p>本文介绍了"绿脉兴农"一体化智能决策支持平台的设计与实现。平台围绕生态产品价值实现与乡村振兴协同发展这一核心命题，融合 AHP 层次分析、耦合协调度模型、障碍度模型与 DeepSeek AI 引擎，构建了从数据采集、综合评估、模式识别到路径优化的完整决策闭环。</p>
+
+  <p>平台主要贡献如下：</p>
+
+  <ol>
+    <li><strong>构建了完整的指标评估体系</strong>：以 10 个典型区县 5 年面板数据为基础，建立涵盖 11 项生态产品价值实现指标与 15 项乡村振兴指标的二维评估体系，通过 AHP 计算组合权重，实现地区发展水平的科学量化。</li>
+    <li><strong>提出了五种差异化发展模式</strong>：通过层次聚类分析提取生态康养型、湿地水域型、农业品牌型、农文旅融合型、城郊消费型五种典型模式，并为每种模式配置量化识别阈值与路径优化建议，弥补了现有研究"一刀切"的不足。</li>
+    <li><strong>集成了 AI 智能路径优化</strong>：创新性地将 DeepSeek 大语言模型与传统数学模型结合，基于评估结果与模式判定生成 500—800 字结构化路径建议，提升了决策支持的智能化水平。</li>
+    <li><strong>实现了完整的产品化落地</strong>：平台采用前后端分离架构，前端基于 Vue 3 + Element Plus 构建，后端基于 FastAPI + SQLAlchemy 实现，提供 30+ 个 RESTful API 端点，支持 PDF 报告自动生成与一键导出，具备完整的产品形态。</li>
+  </ol>
+
+  <h2 class="section-title">创新点</h2>
+
+  <ol>
+    <li><strong>多模型协同</strong>：首次将 AHP、耦合协调度、障碍度、层次聚类四种方法与 LLM 集成于同一平台，实现"评估—识别—诊断—优化"全链条智能化。</li>
+    <li><strong>模式阈值化</strong>：将抽象的"发展模式"转化为可计算的量化阈值表，使模式识别从"专家经验"升级为"数据驱动"。</li>
+    <li><strong>AI 兜底机制</strong>：设计了 AI 不可用时的规则版兜底逻辑，保障平台在任意环境下均可完整演示，提升了鲁棒性。</li>
+    <li><strong>产品化思维</strong>：从研究原型到产品落地，平台具备完整的用户系统、商城交易、案例学习等模块，可直接服务地方政府实际需求。</li>
+  </ol>
+
+  <h2 class="section-title">不足与展望</h2>
+
+  <p>受时间与数据所限，平台仍存在以下不足，未来工作将从以下方向持续优化：</p>
+
+  <ol>
+    <li><strong>样本规模扩展</strong>：当前样本仅覆盖 10 个区县，未来将扩展至全国范围，并引入更长时间跨度的面板数据，提升模式划分的代表性。</li>
+    <li><strong>动态数据采集</strong>：目前数据为静态导入，未来将对接政府开放数据 API，实现数据自动更新与实时评估。</li>
+    <li><strong>模型迭代优化</strong>：AHP 权重依赖专家打分，未来将引入熵权法进行客观赋权并组合优化，提升权重科学性。</li>
+    <li><strong>移动端适配</strong>：当前平台为桌面 Web 应用，未来将开发移动端适配版本与微信小程序，扩大服务触达范围。</li>
+    <li><strong>多模态交互</strong>：未来将引入语音识别与图像识别能力，支持用户通过语音录入数据、上传图片自动识别农产品等场景。</li>
+  </ol>
+
+  <p>展望未来，绿脉兴农平台将持续迭代优化，致力于成为乡村振兴领域的"智能参谋"，让"绿水青山"真正看得见、算得清、走得通，为生态产品价值实现贡献科技力量。</p>
+</div>
+
+<!-- ============================================================
+     参考文献
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">参考文献</h1>
+
+  <ol class="references-list">
+    <li>中共中央办公厅, 国务院办公厅. 关于建立健全生态产品价值实现机制的意见[Z]. 北京: 中共中央办公厅, 2021.</li>
+    <li>中共中央, 国务院. 关于做好 2022 年全面推进乡村振兴重点工作的意见[Z]. 北京: 中共中央, 2022.</li>
+    <li>COSTANZA R, D'ARGE R, DE GROOT R, et al. The value of the world's ecosystem services and natural capital[J]. Nature, 1997, 387(6630): 253-260.</li>
+    <li>欧阳志云, 郑华, 董仁威, 等. 生态系统生产总值（GEP）核算理论与方法[J]. 生态学报, 2020, 40(16): 5437-5444.</li>
+    <li>Saaty T L. The Analytic Hierarchy Process: Planning, Priority Setting, Resource Allocation[M]. New York: McGraw-Hill, 1980.</li>
+    <li>高楠, 李慧, 王成. 基于耦合协调度模型的生态经济系统协调发展研究[J]. 生态经济, 2019, 35(7): 56-62.</li>
+    <li>李芳林, 张明, 王丽. 基于 obstacle degree model 的乡村振兴制约因素识别[J]. 中国农村经济, 2021, (5): 78-92.</li>
+    <li>WARD J H. Hierarchical grouping to optimize an objective function[J]. Journal of the American Statistical Association, 1963, 58(301): 236-244.</li>
+    <li>DeepSeek-AI. DeepSeek-V3 Technical Report[R/OL]. (2024-12-27). https://github.com/deepseek-ai/DeepSeek-V3.</li>
+    <li>Vue.js Team. Vue 3 Documentation[EB/OL]. (2024). https://vuejs.org.</li>
+    <li>FastAPI Team. FastAPI Documentation[EB/OL]. (2024). https://fastapi.tiangolo.com.</li>
+    <li>Element Plus Team. Element Plus Component Library[EB/OL]. (2024). https://element-plus.org.</li>
+    <li>ECharts Team. Apache ECharts Documentation[EB/OL]. (2024). https://echarts.apache.org.</li>
+    <li>倪红军, 陈志刚. 生态产品价值实现路径研究综述[J]. 中国人口·资源与环境, 2022, 32(8): 1-12.</li>
+    <li>张晓明, 李志刚. 基于 AHP-熵权法的乡村振兴水平评价[J]. 农业经济问题, 2021, (10): 88-99.</li>
+  </ol>
+</div>
+
+<!-- ============================================================
+     附录 A 指标体系完整权重表
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">附录 A 指标体系完整权重表</h1>
+
+  <h2 class="section-title">A.1 生态产品价值实现成效评价指标（11 项）</h2>
+
+  <table class="three-line">
+    <caption>生态产品价值实现成效指标体系</caption>
+    <thead>
+      <tr><th>序号</th><th>指标名称</th><th>准则层</th><th>组合权重</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>重要生态功能保护区面积（公顷）</td><td>生态效益</td><td>0.1283</td></tr>
+      <tr><td>2</td><td>主要水体水质断面达标率（%）</td><td>生态效益</td><td>0.0074</td></tr>
+      <tr><td>3</td><td>空气环境质量优良率（%）</td><td>生态效益</td><td>0.0889</td></tr>
+      <tr><td>4</td><td>地区生产总值（万元）</td><td>经济效益</td><td>0.2676</td></tr>
+      <tr><td>5</td><td>全区粮食播种面积（公顷）</td><td>经济效益</td><td>0.1978</td></tr>
+      <tr><td>6</td><td>农产品产出（吨）</td><td>经济效益</td><td>0.1738</td></tr>
+      <tr><td>7</td><td>常住人口城镇化率（%）</td><td>社会效益</td><td>0.0066</td></tr>
+      <tr><td>8</td><td>新增就业人数（人）</td><td>社会效益</td><td>0.0486</td></tr>
+      <tr><td>9</td><td>农村居民人均可支配收入（元）</td><td>社会效益</td><td>0.0346</td></tr>
+      <tr><td>10</td><td>城乡低保标准（元/月）</td><td>社会效益</td><td>0.0161</td></tr>
+      <tr><td>11</td><td>一般公共服务支出（万元）</td><td>社会效益</td><td>0.0304</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">A.2 乡村振兴水平评价指标（15 项）</h2>
+
+  <table class="three-line">
+    <caption>乡村振兴水平指标体系</caption>
+    <thead>
+      <tr><th>序号</th><th>指标名称</th><th>维度</th><th>组合权重</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>粮食总产量（吨）</td><td>产业兴旺</td><td>0.2140</td></tr>
+      <tr><td>2</td><td>农业机械总动力/农作物播种面积（千瓦/亩）</td><td>产业兴旺</td><td>0.0288</td></tr>
+      <tr><td>3</td><td>农林牧渔业总产值（万元）</td><td>产业兴旺</td><td>0.1868</td></tr>
+      <tr><td>4</td><td>森林覆盖率（%）</td><td>生态宜居</td><td>0.0416</td></tr>
+      <tr><td>5</td><td>污水处理厂集中处理率（%）</td><td>生态宜居</td><td>0.0211</td></tr>
+      <tr><td>6</td><td>农村卫生厕所普及率（%）</td><td>生态宜居</td><td>0.0091</td></tr>
+      <tr><td>7</td><td>普通中学专任教师数/在校学生数（%）</td><td>乡风文明</td><td>0.0355</td></tr>
+      <tr><td>8</td><td>图书馆个数（个）</td><td>乡风文明</td><td>0.0428</td></tr>
+      <tr><td>9</td><td>固定互联网宽带接入用户（户）</td><td>乡风文明</td><td>0.0274</td></tr>
+      <tr><td>10</td><td>农林水事务支出占比（%）</td><td>治理有效</td><td>0.0545</td></tr>
+      <tr><td>11</td><td>卫生室/卫生机构数量（个）</td><td>治理有效</td><td>0.0217</td></tr>
+      <tr><td>12</td><td>三种专利申请授权量（件）</td><td>治理有效</td><td>0.1352</td></tr>
+      <tr><td>13</td><td>农村人均可支配收入（元）</td><td>生活富裕</td><td>0.1012</td></tr>
+      <tr><td>14</td><td>农村人均消费支出（元）</td><td>生活富裕</td><td>0.0378</td></tr>
+      <tr><td>15</td><td>人均道路面积（平方米）</td><td>生活富裕</td><td>0.0424</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================
+     附录 B 缩略语表
+     ============================================================ -->
+<div class="page">
+  <h1 class="chapter-title">附录 B 缩略语表</h1>
+
+  <table class="three-line">
+    <caption>缩略语对照表</caption>
+    <thead>
+      <tr><th>缩略语</th><th>英文全称</th><th>中文全称</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AHP</td><td>Analytic Hierarchy Process</td><td>层次分析法</td></tr>
+      <tr><td>CCD</td><td>Coupling Coordination Degree</td><td>耦合协调度</td></tr>
+      <tr><td>GEP</td><td>Gross Ecosystem Product</td><td>生态系统生产总值</td></tr>
+      <tr><td>JWT</td><td>JSON Web Token</td><td>JSON Web 令牌</td></tr>
+      <tr><td>LLM</td><td>Large Language Model</td><td>大语言模型</td></tr>
+      <tr><td>ORM</td><td>Object-Relational Mapping</td><td>对象关系映射</td></tr>
+      <tr><td>PCA</td><td>Principal Component Analysis</td><td>主成分分析</td></tr>
+      <tr><td>REST</td><td>Representational State Transfer</td><td>表述性状态转移</td></tr>
+      <tr><td>SaaS</td><td>Software as a Service</td><td>软件即服务</td></tr>
+      <tr><td>SPA</td><td>Single Page Application</td><td>单页应用</td></tr>
+      <tr><td>UI</td><td>User Interface</td><td>用户界面</td></tr>
+      <tr><td>API</td><td>Application Programming Interface</td><td>应用程序编程接口</td></tr>
+      <tr><td>SVG</td><td>Scalable Vector Graphics</td><td>可缩放矢量图形</td></tr>
+      <tr><td>Ward</td><td>Ward's Minimum Variance Method</td><td>Ward 最小方差法</td></tr>
+    </tbody>
+  </table>
+
+  <br><br>
+
+  <div style="text-align: center; margin-top: 60pt; padding-top: 20pt; border-top: 1.5pt solid #0d3b2e;">
+    <p style="font-family: 'STSong', serif; font-size: 14pt; color: #0d3b2e; font-weight: 700; text-indent: 0;">
+      — 全文完 —
+    </p>
+    <p style="font-family: 'Times New Roman', serif; font-size: 10pt; color: #8a8a8a; margin-top: 8pt; text-indent: 0;">
+      © 2026 绿脉兴农团队 · 南京师范大学<br>
+      LVMAI · ECO-VALUE PLATFORM · TECHNICAL WHITE PAPER V1.0
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
