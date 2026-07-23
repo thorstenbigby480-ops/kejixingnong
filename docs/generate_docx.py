@@ -41,6 +41,14 @@ def add_paragraph(doc, text="", align=WD_ALIGN_PARAGRAPH.LEFT,
     return p
 
 
+def _set_outline_level(p, level):
+    """设置段落大纲级别，使 TOC 能识别"""
+    pPr = p._element.get_or_add_pPr()
+    outlineLvl = OxmlElement('w:outlineLvl')
+    outlineLvl.set(qn('w:val'), str(level - 1))  # Word 中 0=一级
+    pPr.append(outlineLvl)
+
+
 def add_heading(doc, text, level=1, align=WD_ALIGN_PARAGRAPH.LEFT):
     sizes = {1: 16, 2: 14, 3: 12}
     s = sizes.get(level, 12)
@@ -52,6 +60,7 @@ def add_heading(doc, text, level=1, align=WD_ALIGN_PARAGRAPH.LEFT):
     pf.space_after = Pt(6)
     run = p.add_run(text)
     set_run_font(run, name="黑体", name_ascii="Times New Roman", size=s, bold=True)
+    _set_outline_level(p, level)
     return p
 
 
@@ -64,6 +73,7 @@ def add_chapter_title(doc, text):
     pf.space_after = Pt(18)
     run = p.add_run(text)
     set_run_font(run, name="黑体", size=18, bold=True)
+    _set_outline_level(p, 1)
     pPr = p._element.get_or_add_pPr()
     pBdr = OxmlElement('w:pBdr')
     bottom = OxmlElement('w:bottom')
